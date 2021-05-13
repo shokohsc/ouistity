@@ -1,0 +1,26 @@
+{
+  "name": "ouistity",
+  "version": "1.0.0",
+  "description": "Frontend for moleculer-ouistity",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shokohsc/ouistity.git"
+  },
+  "keywords": [
+    "ouistity",
+    "vuejs"
+  ],
+  "author": "shokohsc@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shokohsc/ouistity/issues"
+  },
+  "homepage": "https://github.com/shokohsc/ouistity#readme",
+  "dependencies": {
+    "vue": "^2.6.12"
+  }
+}
