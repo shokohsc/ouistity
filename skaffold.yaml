@@ -1,0 +1,37 @@
+apiVersion: skaffold/v2beta15
+kind: Config
+metadata:
+  name: ouistity
+build:
+  artifacts:
+  - image: shokohsc/ouistity
+    context: .
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kustomize:
+    paths:
+      - k8s/base
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      artifacts:
+      - image: shokohsc/ouistity
+        sync:
+          manual:
+          - src: 'src/**/*.js'
+            dest: .
+  - name: shokohsc
+    build:
+      artifacts:
+      - image: shokohsc/ouistity
+        sync:
+          manual:
+          - src: 'src/**/*.js'
+            dest: .
+    deploy:
+      kustomize:
+        paths:
+          - k8s/overlays/shokohsc
