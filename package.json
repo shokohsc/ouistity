@@ -1,26 +1,17 @@
 {
   "name": "ouistity",
-  "version": "1.0.0",
-  "description": "Frontend for moleculer-ouistity",
-  "main": "index.js",
+  "version": "0.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shokohsc/ouistity.git"
-  },
-  "keywords": [
-    "ouistity",
-    "vuejs"
-  ],
-  "author": "shokohsc@gmail.com",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/shokohsc/ouistity/issues"
-  },
-  "homepage": "https://github.com/shokohsc/ouistity#readme",
   "dependencies": {
-    "vue": "^2.6.12"
+    "vue": "^3.0.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.2.2",
+    "@vue/compiler-sfc": "^3.0.5",
+    "vite": "^2.3.0"
   }
 }
