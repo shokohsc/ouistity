@@ -7,9 +7,13 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "es6-promise": "^4.2.8",
     "graphql": "^15.5.0",
+    "normalize.css": "^8.0.1",
     "vue": "^3.0.5",
-    "vuestic-ui": "^1.0.0"
+    "vuestic-ui": "^1.0.0",
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.2",
