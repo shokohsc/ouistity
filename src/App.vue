@@ -1,57 +1,87 @@
 <template>
-  <!-- <img alt="Loading" src="./assets/loading.gif" /> -->
-  <!-- <HelloWorld msg="Hello Vue 3 + Vite" /> -->
-  <div>
-    <va-input
-      class="mb-4"
-      v-model="value"
-      placeholder="Placeholder"
-    />
-  </div>
-
-  <va-button> Button </va-button>
-
-  <va-switch v-model="darkThemeBool" />
-
-  <va-breadcrumbs>
-    <router-link to="/">Home</router-link>
-    <va-breadcrumbs-item label="path" />
-    <va-breadcrumbs-item label="to" />
-    <va-breadcrumbs-item label="folder" />
-  </va-breadcrumbs>
-
-  <router-view></router-view>
-
-  <div class="row">
-    <div class="flex md6 lg4">
-      <va-card>
-        <va-image
-          src="https://picsum.photos/400/200"
-          style="height: 200px;"
-        />
-        <va-card-title>Title</va-card-title>
-        <va-card-content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</va-card-content>
-      </va-card>
+    <div>
+        <component :is="activeComponent"></component>
     </div>
-  </div>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
+import Filebrowser from './components/Filebrowser.vue';
+import Error from './components/Error.vue';
+import Loading from './components/Loading.vue';
+// import Reader from './components/Reader.vue';
 
-// This starter template is using Vue 3 experimental <script setup> SFCs
-// Check out https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md
 export default {
-  data () {
-    return {
-      searchInput: '',
-      darkThemeBool: true
+    components: {
+        Filebrowser,
+        Loading
+        // Error,
+        // Reader
+    },
+    data() {
+        return {
+            activeComponent: Loading
+        }
+    },
+    // methods: {
+    //     loading: function() {
+    //         this.activeComponent = Loading;
+    //     },
+    //     clear: function() {
+    //         this.$store.commit('comic/reset');
+    //         this.activeComponent = Filebrowser;
+    //     },
+    //     display: function(data) {
+    //         this.$store.commit('comic/setComic', data);
+    //         this.activeComponent = Reader;
+    //     }
+    // },
+    created: function() {
+        const page = 1,
+              size = 10;
+        this.$store.dispatch('books/list', page, size)
+        .then((response) => {
+            const archives = response.data.map((archive) => archive.archive); // TODO DO THAT ON BACKEND
+            let folders = [];
+            archives.forEach((archive) => {
+              let folder = archive.replace('/usr/app/assets/data/archives', '').split('/');
+              folder.pop()
+              folder = folder.join('/')
+              folders[folder] = folder;
+            });
+            console.log(folders);
+
+            // this.$store.commit('books/setBooks', response.data.rows);
+            // this.activeComponent = Filebrowser;
+        })
+        .catch((error) => {
+            console.log(error);
+            this.$store.commit('books/resetBooks');
+            this.activeComponent = Error;
+        });
+        let self = this;
+        // this.$eventBus.$on('loading-comic', () => self.loading());
+        // this.$eventBus.$on('display-comic', (data) => self.display(data));
+        // this.$eventBus.$on('close-comic', () => self.clear());
     }
-  },
-}
+};
 </script>
 
 <style>
+
+body {
+	background-color: #23232e;
+	font: 14px normal Arial, Helvetica, sans-serif;
+	z-index: -4;
+}
+
+.hidden {
+	display: none;
+}
+
+.visible {
+	display: block;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
