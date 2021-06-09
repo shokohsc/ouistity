@@ -9,6 +9,7 @@ import Filebrowser from './components/Filebrowser.vue';
 import Error from './components/Error.vue';
 import Loading from './components/Loading.vue';
 // import Reader from './components/Reader.vue';
+import { archives } from './api';
 
 export default {
     components: {
@@ -36,29 +37,19 @@ export default {
     //     }
     // },
     created: function() {
-        const page = 1,
-              size = 10;
-        this.$store.dispatch('books/list', page, size)
+        const directory = 'comics/star wars'; // TODO link that to the router
+        archives.list(directory)
         .then((response) => {
-            const archives = response.data.map((archive) => archive.archive); // TODO DO THAT ON BACKEND
-            let folders = [];
-            archives.forEach((archive) => {
-              let folder = archive.replace('/usr/app/assets/data/archives', '').split('/');
-              folder.pop()
-              folder = folder.join('/')
-              folders[folder] = folder;
-            });
-            console.log(folders);
-
-            // this.$store.commit('books/setBooks', response.data.rows);
-            // this.activeComponent = Filebrowser;
+            console.log(response.data);
+            // this.$store.commit('folders/setFolders', response.data);
+            this.activeComponent = Filebrowser;
         })
         .catch((error) => {
             console.log(error);
-            this.$store.commit('books/resetBooks');
+            // this.$store.commit('books/resetBooks');
             this.activeComponent = Error;
         });
-        let self = this;
+        // let self = this;
         // this.$eventBus.$on('loading-comic', () => self.loading());
         // this.$eventBus.$on('display-comic', (data) => self.display(data));
         // this.$eventBus.$on('close-comic', () => self.clear());
