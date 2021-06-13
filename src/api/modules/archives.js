@@ -2,7 +2,7 @@ import api from '../';
 import { graphql } from '../';
 
 export default {
-    list(directory, page = 1, pageSize = 10) {
+    browse(directory = '', page = 1, pageSize = 10) {
         return graphql.post('/', {
           query: `
             {
@@ -11,10 +11,7 @@ export default {
                 page: ${page}
                 pageSize: ${pageSize}
               ){
-                rows{
-                  name
-                  type
-                }
+                rows { urn name type cover }
                 total
                 totalPages
                 page
