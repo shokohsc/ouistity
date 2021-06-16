@@ -1,28 +1,30 @@
 <template>
   <div>
-  <router-view />
+    <router-link to="/">Browse</router-link>
+    <router-view />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+};
 </script>
 
 <style>
 
 body {
 	background-color: #23232e;
-	font: 14px normal Arial, Helvetica, sans-serif;
-	z-index: -4;
+	/* font: 14px normal Arial, Helvetica, sans-serif; */
+	/* z-index: -4; */
 }
 
-.hidden {
+/* .hidden {
 	display: none;
 }
 
 .visible {
 	display: block;
-}
+} */
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -32,4 +34,5 @@ body {
   color: #2c3e50;
   margin-top: 60px;
 }
+
 </style>

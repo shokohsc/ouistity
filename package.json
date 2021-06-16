@@ -11,6 +11,7 @@
     "es6-promise": "^4.2.8",
     "normalize.css": "^8.0.1",
     "vue": "^3.0.5",
+    "vue3-touch-events": "^4.1.0",
     "vuestic-ui": "^1.0.0",
     "vuex": "^4.0.0"
   },

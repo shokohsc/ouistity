@@ -1,14 +1,18 @@
 import api from '../';
+import { graphql } from '../';
 
 export default {
-    get(urn, success, failure) {
-        return api.get('/api/v1/pages/', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            params: {
-                urn: urn
+    read(urn) {
+        return graphql.post('/', {
+          query: `
+            {
+              read(
+                book: "${urn}"
+              ){
+                rows { image }
+              }
             }
+          `
         });
     }
 };
