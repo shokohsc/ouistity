@@ -1,5 +1,3 @@
-import { pages } from '../../api/'
-
 // initial state
 const state = {
     pages: [],

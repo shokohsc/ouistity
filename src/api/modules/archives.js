@@ -1,4 +1,3 @@
-import api from '../';
 import { graphql } from '../';
 
 export default {

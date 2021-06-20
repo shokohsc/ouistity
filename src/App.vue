@@ -10,10 +10,8 @@ export default {
 </script>
 
 <style>
-
 body {
 	background-color: #23232e;
-	/* z-index: -4; */
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -22,5 +20,4 @@ body {
   text-align: center;
   color: #2c3e50;
 }
-
 </style>

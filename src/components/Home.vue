@@ -1,5 +1,5 @@
 <template>
-  <div class="row justify--center" @scroll.once="scroll">
+  <div class="row justify--center">
     <div class="flex xs12 md3" v-for="(file, index) in entries" :key="index">
       <va-card :to="file.route" color="#000000" style="padding-top:20px;">
         <va-image :src="file.cover" style="height:324px; width: 216px; margin: 0 auto;"/>
@@ -35,9 +35,9 @@
           type: 'folder',
           route: {
             path: '/',
-            query: {
+            query: this.directory.replace(/([^\/]*)\/*$/, '').length > 0 ? {
               directory: this.directory.replace(/([^\/]*)\/*$/, '')
-            }
+            } : {}
           },
           cover: this.thumbor + window.location.protocol + "//i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/portrait_incredible.jpg"
         }
@@ -108,6 +108,3 @@
     },
   }
 </script>
-
-<style>
-</style>
