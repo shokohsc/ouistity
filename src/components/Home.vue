@@ -39,24 +39,27 @@
               directory: this.directory.replace(/([^\/]*)\/*$/, '')
             } : {}
           },
-          cover: this.thumbor + window.location.protocol + "//i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/portrait_incredible.jpg"
+          cover: this.thumbor + this.defaultCover
         }
       }
     },
     data() {
       return {
         loading: true,
+        useThumbor: true,
         directory: '',
         page: 1,
         pageSize: 10,
         files: [],
         totalPages: 1,
         lastFetchedPage: 1,
+        defaultCover: window.location.protocol + "//i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/portrait_incredible.jpg",
         thumbor: window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/',
         api: window.location.protocol + '//api.' + window.location.hostname,
       }
     },
     created() {
+      window.scrollTo(0, 0);
       window.addEventListener('scroll', this.handleScroll);
       this.$watch(
         () => this.$route.query.directory,
@@ -85,7 +88,7 @@
               const browse = response.data.data.browse;
               browse.rows.forEach(row => {
                 row.route = row.type === 'folder' ? { path: '/', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };
-                row.cover = row.cover ? this.thumbor + 'http://api:5000' + row.cover : this.thumbor + window.location.protocol + "//i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/portrait_incredible.jpg";
+                row.cover = row.cover ? this.thumbor + 'http://api:5000' + row.cover : this.thumbor + this.defaultCover;
                 row.name  = row.type === 'file' ? row.name.replace(/(\(.+\))/gm, '').replace(/\.(cbr|cbz)$/, '') : row.name;
                 this.files.push(row);
               });
@@ -95,7 +98,7 @@
           })
           .catch((error) => {
               console.log(error);
-              this.files = [];
+              // this.files = [];
               this.loading = false
           });
       },

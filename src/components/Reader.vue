@@ -1,8 +1,8 @@
 <template>
   <div :style="{ height: height + 'px' }">
-    <div v-on:click="previousPage" class="left"></div>
-    <div v-on:click="close" class="center"></div>
-    <div v-on:click="nextPage" class="right"></div>
+    <div @click="previousPage" class="left"></div>
+    <div @click="close" class="center"></div>
+    <div @click="nextPage" class="right"></div>
     <img :src="image" :width="width" class="image"/>
     <p class="pages glow">{{ page }} / {{ total }}</p>
   </div>
@@ -62,16 +62,16 @@
             this.previousPage();
             break;
         }
-      },
-      scroll: function(event) {
-        let speed = Math.abs(event.overallVelocityY);
-            speed = Math.floor(speed) > 0 ? speed : 1;
-        const scroll = {
-          top: Math.floor((window.scrollY - event.deltaY) * speed),
-          behavior: 'smooth'
-        };
-        window.scroll(scroll);
-      },
+      // },
+      // scroll: function(event) {
+      //   let speed = Math.abs(event.overallVelocityY);
+      //       speed = Math.floor(speed) > 0 ? speed : 1;
+      //   const scroll = {
+      //     top: Math.floor((window.scrollY - event.deltaY) * speed),
+      //     behavior: 'smooth'
+      //   };
+      //   window.scroll(scroll);
+      }
     },
     created: function() {
       const index = 0 // TODO: get this from localstorage
