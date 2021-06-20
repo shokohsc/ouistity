@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link to="/">Browse</router-link>
+    <router-link to="/">Root</router-link>
     <router-view />
   </div>
 </template>
