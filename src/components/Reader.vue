@@ -92,7 +92,6 @@
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
       },
       keyUp: function(event) {
-        console.log(event.keyCode);
         switch (event.keyCode) {
           case 39:
             this.nextPage();
