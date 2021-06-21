@@ -21,13 +21,13 @@
         return this.pages.length;
       },
       thumbor: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/';
+        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/smart/filters:quality(75)/';
       },
       api: function() {
         return window.location.protocol + '//api.' + window.location.hostname;
       },
       image: function() {
-        return this.thumbor + 'http://api:5000' + (this.total > 0 ? this.pages[this.index].image : '/');
+        return (this.useThumbor ? this.thumbor + 'http://api:5000' : this.api) + (this.total > 0 ? this.pages[this.index].image : '/');
       },
       width: function() {
         return window.screen.availWidth;
@@ -93,17 +93,20 @@
       },
       keyUp: function(event) {
         switch (event.keyCode) {
-          case 39:
-            this.nextPage();
+          case 37:
+            this.previousPage();
             break;
           case 38:
             this.fullscreen();
             break;
-          case 27:
+          case 39:
+            this.nextPage();
+            break;
+          case 40:
             this.close();
             break;
-          case 37:
-            this.previousPage();
+          case 27:
+            this.close();
             break;
         }
       },
@@ -122,7 +125,7 @@
             console.log(error);
             this.loading = false
           });
-      },
+      }
     }
   };
 </script>

@@ -46,7 +46,7 @@
         return window.location.protocol + "//i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/portrait_incredible.jpg";
       },
       thumbor: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/';
+        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/filters:quality(80)/';
       },
       api: function() {
         return window.location.protocol + '//api.' + window.location.hostname;
@@ -94,7 +94,7 @@
               const browse = response.data.data.browse;
               browse.rows.forEach(row => {
                 row.route = row.type === 'folder' ? { path: '/', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };
-                row.cover = row.cover ? this.thumbor + 'http://api:5000' + row.cover : this.thumbor + this.defaultCover;
+                row.cover = row.cover ? (this.useThumbor ? this.thumbor + 'http://api:5000' : this.api) + row.cover : this.thumbor + this.defaultCover;
                 row.name  = row.type === 'file' ? row.name.replace(/(\(.+\))/gm, '').replace(/\.(cbr|cbz)$/, '') : row.name;
                 this.files.push(row);
               });
