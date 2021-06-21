@@ -41,6 +41,15 @@
           },
           cover: this.thumbor + this.defaultCover
         }
+      },
+      defaultCover: function() {
+        return window.location.protocol + "//i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/portrait_incredible.jpg";
+      },
+      thumbor: function() {
+        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/';
+      },
+      api: function() {
+        return window.location.protocol + '//api.' + window.location.hostname;
       }
     },
     data() {
@@ -52,10 +61,7 @@
         pageSize: 10,
         files: [],
         totalPages: 1,
-        lastFetchedPage: 1,
-        defaultCover: window.location.protocol + "//i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/portrait_incredible.jpg",
-        thumbor: window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/',
-        api: window.location.protocol + '//api.' + window.location.hostname,
+        lastFetchedPage: 1
       }
     },
     created() {
@@ -98,13 +104,12 @@
           })
           .catch((error) => {
               console.log(error);
-              // this.files = [];
               this.loading = false
           });
       },
       async handleScroll(e) {
         e.stopPropagation();
-        if ((window.scrollY > (document.body.offsetHeight - window.outerHeight)) && (!this.loading) && (this.lastFetchedPage < this.totalPages)) {
+        if ((window.scrollY >= (document.body.offsetHeight - window.outerHeight)) && (!this.loading) && (this.lastFetchedPage < this.totalPages)) {
           await this.fetchData(this.directory, this.lastFetchedPage + 1, this.pageSize)
         }
       }

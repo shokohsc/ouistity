@@ -12,8 +12,7 @@
     "normalize.css": "^8.0.1",
     "vue": "^3.0.5",
     "vue-router": "4",
-    "vuestic-ui": "^1.1.1",
-    "vuex": "^4.0.0"
+    "vuestic-ui": "^1.1.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.3",
