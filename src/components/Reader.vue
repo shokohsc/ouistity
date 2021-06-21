@@ -135,7 +135,7 @@
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 1;
+    z-index: 10;
     height: 100%;
     width: 20%;
     cursor: w-resize;
@@ -146,7 +146,7 @@
     position: fixed;
     left: 20%;
     top: 0;
-    z-index: 1;
+    z-index: 10;
     height: 50%;
     width: 60%;
     cursor: zoom-in;
@@ -157,7 +157,7 @@
     position: fixed;
     left: 20%;
     top: 50%;
-    z-index: 1;
+    z-index: 10;
     height: 50%;
     width: 60%;
     cursor: not-allowed;
@@ -168,7 +168,7 @@
     position: fixed;
     left: 80%;
     top: 0;
-    z-index: 1;
+    z-index: 10;
     height: 100%;
     width: 20%;
     cursor: e-resize;
@@ -179,7 +179,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    z-index: -1;
+    z-index: 5;
     width: 100%;
 }
 .pages {
