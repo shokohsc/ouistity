@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import { pages } from '../api';
+  import { book } from '../api';
 
   export default {
     computed: {
@@ -113,7 +113,7 @@
       async fetchData() {
         this.loading = true
 
-        await pages.read(this.$route.params.urn)
+        await book.read(this.$route.params.urn)
           .then((response) => {
             const read = response.data.data.read;
             read.rows.forEach(row => {

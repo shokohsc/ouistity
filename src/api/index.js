@@ -1,6 +1,6 @@
 import axios from 'axios';
-import archives from './modules/archives'
-import pages from './modules/pages'
+import folder from './modules/folder'
+import book from './modules/book'
 
 const graphqlConfig = {
   protocol: "https",
@@ -14,7 +14,7 @@ const graphql = axios.create({
 });
 
 export {
-    archives as archives,
-    pages as pages,
+    folder as folder,
+    book as book,
     graphql as graphql
 }

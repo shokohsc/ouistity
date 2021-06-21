@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import { archives } from '../api';
+  import { folder } from '../api';
 
   export default {
     computed: {
@@ -89,7 +89,7 @@
       async fetchData(directory = '', page = 1, pageSize = 10) {
         this.loading = true
 
-        await archives.browse(directory, page, pageSize)
+        await folder.browse(directory, page, pageSize)
           .then((response) => {
               const browse = response.data.data.browse;
               browse.rows.forEach(row => {

@@ -1,14 +1,14 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import Home from './components/Home.vue';
+import Browser from './components/Browser.vue';
 import Reader from './components/Reader.vue';
 // import Search from './components/Search.vue';
 
 const routes = [
   {
-    name: 'Home',
+    name: 'Browser',
     path: '/',
-    component: Home,
+    component: Browser,
     props: (route) => ({ query: route.query })
   },
   {
