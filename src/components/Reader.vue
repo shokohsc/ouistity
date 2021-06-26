@@ -1,5 +1,5 @@
 <template>
-  <progress v-if="!loaded" class="progress is-black has-background-grey" max="100">80%</progress>
+  <progress v-if="!loaded" class="progress" max="100">80%</progress>
   <div class="page is-align-items-center">
     <div @click="previousPage" class="previous" />
     <div @click="fullscreen" class="fullscreen" />
@@ -141,11 +141,16 @@
 </script>
 
 <style>
-progress {
+progress.progress {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 5;
+  z-index: 8;
+  border-radius: 0px;
+}
+progress.progress:indeterminate {
+  background-color: #23232e;
+  background-image: linear-gradient(to right, #0a0a0a 30%, #23232e 30%);
 }
 .previous {
   position: fixed;

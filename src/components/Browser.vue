@@ -1,5 +1,5 @@
 <template>
-    <progress v-if="loading" class="progress is-black has-background-grey" max="100">80%</progress>
+    <progress v-if="loading" class="progress" max="100">10%</progress>
     <div class="columns is-justify-content-center is-mobile" v-bind="$attrs">
       <div class="column is-8">
         <input v-model="q" class="input is-large has-text-black has-background-grey" type="text" placeholder="Search..." />
@@ -142,10 +142,15 @@
 </script>
 
 <style>
-progress {
+progress.progress {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 5;
+  border-radius: 0px;
+}
+progress.progress:indeterminate {
+  background-color: #23232e;
+  background-image: linear-gradient(to right, #0a0a0a 30%, #23232e 30%);
 }
 </style>
