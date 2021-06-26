@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="columns is-justify-content-center is-mobile">
+    <progress v-if="loading" class="progress is-black has-background-grey" max="100">80%</progress>
+    <div class="columns is-justify-content-center is-mobile" v-bind="$attrs">
       <div class="column is-8">
         <input v-model="q" class="input is-large has-text-black has-background-grey" type="text" placeholder="Search..." />
       </div>
@@ -15,7 +15,6 @@
     <div class="columns is-justify-content-center is-multiline">
       <File :file="file" v-for="(file, index) in entries" :key="index" />
     </div>
-  </div>
 </template>
 
 <script>
@@ -72,6 +71,7 @@
       this.$watch(
         () => this.$route.query.directory,
         async () => {
+          this.q = ''
           this.directory = this.$route.query.hasOwnProperty('directory') ? this.$route.query.directory : ''
           this.page = this.$route.query.hasOwnProperty('page') ? this.$route.query.page : 1
           this.pageSize = this.$route.query.hasOwnProperty('pageSize') ? this.$route.query.pageSize : 10
@@ -140,3 +140,12 @@
     },
   }
 </script>
+
+<style>
+progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
+</style>

@@ -1,10 +1,11 @@
 <template>
+  <progress v-if="!loaded" class="progress is-black has-background-grey" max="100">80%</progress>
   <div class="page is-align-items-center">
     <div @click="previousPage" class="previous" />
     <div @click="fullscreen" class="fullscreen" />
     <div @click="close" class="close" />
     <div @click="nextPage" class="next" />
-    <img v-if="!loading" @load="load" :src="image" />
+    <img id=page v-if="!loading" @load="enhance" :src="image" class="loading" />
     <p class="pages glow">{{ currentPage }} / {{ total }}</p>
   </div>
 </template>
@@ -21,10 +22,10 @@
         return this.pages.length;
       },
       lowRes: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/smart/filters:quality(5)/';
+        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/smart/filters:quality(40)/';
       },
       highRes: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/smart/filters:quality(75)/';
+        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/smart/filters:quality(100)/';
       },
       api: function() {
         return window.location.protocol + '//api.' + window.location.hostname;
@@ -86,6 +87,7 @@
         window.localStorage.setItem(this.$route.params.urn, this.index)
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.getElementById('page').classList.add('is-hidden')
       },
       previousPage: function() {
         this.loaded = false;
@@ -93,6 +95,7 @@
         window.localStorage.setItem(this.$route.params.urn, this.index)
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.getElementById('page').classList.add('is-hidden')
       },
       keyUp: function(event) {
         switch (event.keyCode) {
@@ -113,8 +116,9 @@
             break;
         }
       },
-      load(e) {
+      enhance(e) {
         this.loaded = true
+        document.getElementById('page').classList.remove('is-hidden')
       },
       async fetchData() {
         this.loading = true
@@ -137,6 +141,12 @@
 </script>
 
 <style>
+progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
 .previous {
   position: fixed;
   left: 0;
@@ -191,6 +201,10 @@
 }
 .page img {
   width: 100%;
+}
+img.loading {
+  opacity: 1;
+  transition: opacity 1s linear;
 }
 .pages {
   position: absolute;

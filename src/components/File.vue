@@ -1,17 +1,19 @@
 <template>
-  <div class="column is-2">
-    <router-link :to="file.route">
+  <div class="column is-narrow">
       <div class="box has-background-black">
-        <div class="block">
-          <figure class="image">
-            <img @load="enhance" :src="image" alt="{{ file.name }}" />
-          </figure>
-        </div>
-        <div class="block has-text-white has-text-centered">
-          {{ file.name }}
-        </div>
+        <router-link :to="file.route">
+          <div class="block">
+            <figure class="image">
+              <img @load="enhance" :src="image" alt="{{ file.name }}" loading="lazy" class="cover" />
+            </figure>
+          </div>
+          <div class="block has-text-white has-text-centered">
+            <div style="width: 216px; margin: 0 auto;">
+              {{ file.name }}
+            </div>
+          </div>
+        </router-link>
       </div>
-    </router-link>
   </div>
 </template>
 
@@ -52,3 +54,11 @@
     },
   }
 </script>
+
+<style>
+img.cover {
+  width: 216px;
+  height: 324px;
+  margin: 0 auto;
+}
+</style>
