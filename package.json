@@ -3,20 +3,27 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "sync": "browser-sync start -c bs-config.js",
+    "dev-sync": "concurrently --kill-others \"npm run dev\" \"npm run sync\"",
     "build": "vite build",
     "serve": "vite preview"
   },
   "dependencies": {
+    "@fontsource/source-sans-pro": "^4.4.5",
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "axios": "^0.21.1",
+    "bulma": "^0.9.3",
     "es6-promise": "^4.2.8",
-    "normalize.css": "^8.0.1",
     "vue": "^3.0.5",
-    "vue-router": "4",
-    "vuestic-ui": "^1.1.1"
+    "vue-router": "4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.3",
     "@vue/compiler-sfc": "^3.0.5",
+    "autoprefixer": "^10.2.6",
+    "browser-sync": "^2.26.14",
+    "concurrently": "^6.2.0",
+    "postcss": "^8.3.5",
     "vite": "^2.3.0"
   }
 }

@@ -1,16 +1,16 @@
 <template>
-  <div class="row justify--center">
+  <div class="page is-align-items-center">
     <div @click="previousPage" class="previous" />
     <div @click="fullscreen" class="fullscreen" />
     <div @click="close" class="close" />
     <div @click="nextPage" class="next" />
-    <img v-if="!loading" :src="image" :width="width" class="image"/>
+    <img v-if="!loading" @load="load" :src="image" />
     <p class="pages glow">{{ currentPage }} / {{ total }}</p>
   </div>
 </template>
 
 <script>
-  import { book } from '../api';
+  import graphql from '../api';
 
   export default {
     computed: {
@@ -20,35 +20,36 @@
       total: function() {
         return this.pages.length;
       },
-      thumbor: function() {
+      lowRes: function() {
+        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/smart/filters:quality(5)/';
+      },
+      highRes: function() {
         return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/smart/filters:quality(75)/';
       },
       api: function() {
         return window.location.protocol + '//api.' + window.location.hostname;
       },
       image: function() {
-        return (this.useThumbor ? this.thumbor + 'http://api:5000' : this.api) + (this.total > 0 ? this.pages[this.index].image : '/');
-      },
-      width: function() {
-        return window.screen.availWidth;
+        return (this.useThumbor ? (this.loaded ? this.highRes : this.lowRes) + 'http://api:5000' : this.api) + (this.total > 0 ? this.pages[this.index].image : '/');
       }
     },
     data() {
       return {
         loading: true,
+        loaded: false,
         useThumbor: true,
         index: 0,
         pages: [],
       }
     },
-    created: function() {
+    created() {
       window.scrollTo(0, 0);
       window.addEventListener('keyup', this.keyUp);
       this.$watch(
         () => this.$route.query.page,
-        () => {
+        async () => {
           this.pages = []
-          this.fetchData()
+          await this.fetchData()
           this.index = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
           window.localStorage.setItem(this.$route.params.urn, this.index)
         },
@@ -80,12 +81,14 @@
         }
       },
       nextPage: function() {
+        this.loaded = false;
         this.index = this.index < this.pages.length ? parseInt(this.index) + 1 : this.index;
         window.localStorage.setItem(this.$route.params.urn, this.index)
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
       },
       previousPage: function() {
+        this.loaded = false;
         this.index = parseInt(this.index > 0 ? parseInt(this.index) - 1 : this.index);
         window.localStorage.setItem(this.$route.params.urn, this.index)
         document.body.scrollTop = 0; // For Safari
@@ -110,10 +113,13 @@
             break;
         }
       },
+      load(e) {
+        this.loaded = true
+      },
       async fetchData() {
         this.loading = true
 
-        await book.read(this.$route.params.urn)
+        await graphql.read(this.$route.params.urn)
           .then((response) => {
             const read = response.data.data.read;
             read.rows.forEach(row => {
@@ -132,64 +138,68 @@
 
 <style>
 .previous {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 10;
-    height: 100%;
-    width: 20%;
-    cursor: w-resize;
-    /* opacity: 0.5;
-    background-color: #F00; */
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  height: 100%;
+  width: 20%;
+  cursor: w-resize;
+  /* opacity: 0.5;
+  background-color: #F00; */
 }
 .fullscreen {
-    position: fixed;
-    left: 20%;
-    top: 0;
-    z-index: 10;
-    height: 50%;
-    width: 60%;
-    cursor: zoom-in;
-    /* opacity: 0.5;
-    background-color: #F00; */
+  position: fixed;
+  left: 20%;
+  top: 0;
+  z-index: 10;
+  height: 50%;
+  width: 60%;
+  cursor: zoom-in;
+  /* opacity: 0.5;
+  background-color: #F00; */
 }
 .close {
-    position: fixed;
-    left: 20%;
-    top: 50%;
-    z-index: 10;
-    height: 50%;
-    width: 60%;
-    cursor: not-allowed;
-    /* opacity: 0.5;
-    background-color: #0F0; */
+  position: fixed;
+  left: 20%;
+  top: 50%;
+  z-index: 10;
+  height: 50%;
+  width: 60%;
+  cursor: not-allowed;
+  /* opacity: 0.5;
+  background-color: #0F0; */
 }
 .next {
-    position: fixed;
-    left: 80%;
-    top: 0;
-    z-index: 10;
-    height: 100%;
-    width: 20%;
-    cursor: e-resize;
-    /* opacity: 0.5;
-    background-color: #00F; */
+  position: fixed;
+  left: 80%;
+  top: 0;
+  z-index: 10;
+  height: 100%;
+  width: 20%;
+  cursor: e-resize;
+  /* opacity: 0.5;
+  background-color: #00F; */
 }
-.image {
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 5;
-    width: 100%;
+.page {
+  top: 0;
+  left: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 5;
+}
+.page img {
+  width: 100%;
 }
 .pages {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    opacity: 0.2;
-    pointer-events: none;
-    font-family: monospace;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0.2;
+  pointer-events: none;
+  font-family: monospace;
 }
 .glow {
   font-size: 80px;

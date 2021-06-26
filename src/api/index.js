@@ -1,7 +1,4 @@
 import axios from 'axios';
-import folder from './modules/folder'
-import book from './modules/book'
-import query from './modules/query'
 
 const graphqlConfig = {
   protocol: "https",
@@ -14,9 +11,56 @@ const graphql = axios.create({
   // timeout: 500
 });
 
-export {
-    folder as folder,
-    book as book,
-    query as query,
-    graphql as graphql
-}
+export default {
+    browse(directory = '', page = 1, pageSize = 10) {
+        return graphql.post('/', {
+          query: `
+            {
+              browse(
+                directory: "${directory}"
+                page: ${page}
+                pageSize: ${pageSize}
+              ){
+                rows { urn name type cover }
+                total
+                totalPages
+                page
+                pageSize
+              }
+            }
+          `
+        });
+    },
+    read(urn) {
+        return graphql.post('/', {
+          query: `
+            {
+              read(
+                book: "${urn}"
+              ){
+                rows { image }
+              }
+            }
+          `
+        });
+    },
+    search(query = '', page = 1, pageSize = 10) {
+        return graphql.post('/', {
+          query: `
+            {
+              search(
+                query: "${query}"
+                page: ${page}
+                pageSize: ${pageSize}
+              ){
+                rows { urn name type cover }
+                total
+                totalPages
+                page
+                pageSize
+              }
+            }
+          `
+        });
+    }
+};

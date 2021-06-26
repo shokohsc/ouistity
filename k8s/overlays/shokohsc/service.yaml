@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ouistity
+spec:
+  ports:
+    - port: 3000
+      targetPort: dev
+      protocol: TCP
+      name: dev
+    - port: 3002
+      targetPort: browser-sync
+      protocol: TCP
+      name: browser-sync

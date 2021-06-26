@@ -1,23 +1,32 @@
 <template>
-  <div class="row justify--center">
-    <div class="flex xs12 md3" v-for="(file, index) in entries" :key="index">
-      <va-card :to="file.route" color="#000000" style="padding-top:20px;">
-        <va-image :src="file.cover" style="height:324px; width: 216px; margin: 0 auto;"/>
-        <va-card-title class="justify--center">{{ file.name }}</va-card-title>
-        <!-- <va-card-content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</va-card-content> -->
-      </va-card>
+  <div>
+    <div class="columns is-justify-content-center is-mobile">
+      <div class="column is-8">
+        <input v-model="q" class="input is-large has-text-black has-background-grey" type="text" placeholder="Search..." />
+      </div>
+      <div class="column is-narrow">
+        <button @click="clear" class="button is-large">
+          <span class="icon">
+            <i class="fas fa-times"></i>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="columns is-justify-content-center is-multiline">
+      <File :file="file" v-for="(file, index) in entries" :key="index" />
     </div>
   </div>
 </template>
 
 <script>
-  import { folder } from '../api';
+  import File from './File.vue';
+  import graphql from '../api';
 
   export default {
+    components: {
+      File
+    },
     computed: {
-      empty: function() {
-        return 0 === this.files.length;
-      },
       entries: function() {
         return this.files.sort(function (fileA, fileB) {
           if (fileA.name.toLowerCase() > fileB.name.toLowerCase()) {
@@ -39,21 +48,13 @@
               directory: this.directory.replace(/([^\/]*)\/*$/, '')
             } : {}
           },
-          cover: this.thumbor + this.defaultCover
+          cover: null
         }
-      },
-      defaultCover: function() {
-        return window.location.protocol + "//i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/portrait_incredible.jpg";
-      },
-      thumbor: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/filters:quality(80)/';
-      },
-      api: function() {
-        return window.location.protocol + '//api.' + window.location.hostname;
       }
     },
     data() {
       return {
+        q: '',
         loading: true,
         useThumbor: true,
         directory: '',
@@ -67,15 +68,16 @@
     created() {
       window.scrollTo(0, 0);
       window.addEventListener('scroll', this.handleScroll);
+      window.addEventListener('keyup', this.keyUp);
       this.$watch(
         () => this.$route.query.directory,
-        () => {
+        async () => {
           this.directory = this.$route.query.hasOwnProperty('directory') ? this.$route.query.directory : ''
           this.page = this.$route.query.hasOwnProperty('page') ? this.$route.query.page : 1
           this.pageSize = this.$route.query.hasOwnProperty('pageSize') ? this.$route.query.pageSize : 10
           this.files = []
-          this.fetchData(this.directory, this.page, this.pageSize)
-          if (this.directory !== '') {
+          await this.fetchData(this.q, this.directory, this.page, this.pageSize)
+          if (this.directory !== '' && this.directory !== '/') {
             this.files.push(this.parentDirectory);
           }
         },
@@ -84,21 +86,22 @@
     },
     destroyed () {
       window.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('keyup', this.keyUp);
     },
     methods: {
-      async fetchData(directory = '', page = 1, pageSize = 10) {
+      async fetchData(q = '', directory = '', page = 1, pageSize = 10) {
         this.loading = true
 
-        await folder.browse(directory, page, pageSize)
+        const argument = q.length > 2 ? q : directory
+        await graphql[`${q.length > 2 ? 'search' : 'browse'}`](argument, page, pageSize)
           .then((response) => {
-              const browse = response.data.data.browse;
-              browse.rows.forEach(row => {
+              const result = response.data.data[`${q.length > 2 ? 'search' : 'browse'}`];
+              result.rows.forEach(row => {
                 row.route = row.type === 'folder' ? { path: '/', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };
-                row.cover = row.cover ? (this.useThumbor ? this.thumbor + 'http://api:5000' : this.api) + row.cover : this.thumbor + this.defaultCover;
-                row.name  = row.type === 'file' ? row.name.replace(/(\(.+\))/gm, '').replace(/\.(cbr|cbz)$/, '') : row.name;
+                row.name  = row.type === 'file' ? row.name.replace(/(\(.+\))/gm, '').replace(/\.(cbr|cbz)$/, '') : row.name.match(/([^\/]*)\/*$/)[0];
                 this.files.push(row);
               });
-              this.totalPages = browse.totalPages;
+              this.totalPages = result.totalPages;
               this.lastFetchedPage = page;
               this.loading = false
           })
@@ -107,10 +110,31 @@
               this.loading = false
           });
       },
+      keyUp: function(e) {
+        switch (e.keyCode) {
+          case 13:
+            this.validate();
+            break;
+        }
+      },
+      async clear(e) {
+        if (this.q !== '') {
+          this.files = []
+          this.q = '';
+          await this.fetchData(this.q, this.directory, this.page, this.pageSize)
+        }
+      },
+      async validate() {
+        if (this.q.length > 2) {
+          this.files = []
+          this.directory = ''
+          await this.fetchData(this.q, this.directory, this.page, this.pageSize)
+        }
+      },
       async handleScroll(e) {
         e.stopPropagation();
         if ((window.scrollY >= (document.body.offsetHeight - window.outerHeight)) && (!this.loading) && (this.lastFetchedPage < this.totalPages)) {
-          await this.fetchData(this.directory, this.lastFetchedPage + 1, this.pageSize)
+          await this.fetchData(this.q, this.directory, this.lastFetchedPage + 1, this.pageSize)
         }
       }
     },

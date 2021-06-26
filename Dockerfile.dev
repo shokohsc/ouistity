@@ -2,7 +2,7 @@
 FROM node:lts-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN apk add --no-cache ca-certificates && npm install
 COPY . .
 ENTRYPOINT ["npm", "run"]
 CMD ["dev"]
