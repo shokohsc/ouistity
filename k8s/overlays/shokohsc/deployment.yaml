@@ -15,12 +15,12 @@ spec:
             - name: serve
               containerPort: 5000
               protocol: TCP
-      #       - name: dev
-      #         containerPort: 3000
-      #         protocol: TCP
-      #       - name: browser-sync
-      #         containerPort: 3002
-      #         protocol: TCP
+            # - name: dev
+            #   containerPort: 3000
+            #   protocol: TCP
+            # - name: browser-sync
+            #   containerPort: 3002
+            #   protocol: TCP
       #     lifecycle:
       #       postStart:
       #         exec:

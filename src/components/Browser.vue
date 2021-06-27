@@ -64,7 +64,6 @@
       return {
         q: '',
         loading: true,
-        useThumbor: true,
         directory: '',
         page: 1,
         pageSize: 10,

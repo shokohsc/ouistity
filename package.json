@@ -5,7 +5,7 @@
     "dev": "vite",
     "sync": "browser-sync start -c bs-config.js",
     "dev-serve": "concurrently --kill-others \"npm run dev\" \"npm run serve\"",
-    "dev-sync": "concurrently --kill-others \"npm run dev\" \"npm run serve\" \"npm run sync\"",
+    "dev-serve-sync": "concurrently --kill-others \"npm run dev\" \"npm run serve\" \"npm run sync\"",
     "build": "vite build",
     "serve": "vite preview"
   },
