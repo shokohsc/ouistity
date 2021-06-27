@@ -23,10 +23,10 @@
   export default {
     computed: {
       lowRes: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/filters:quality(5)/';
+        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/filters:quality(40)/';
       },
       highRes: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/filters:quality(80)/';
+        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/filters:quality(100)/';
       },
       api: function() {
         return window.location.protocol + '//api.' + window.location.hostname;

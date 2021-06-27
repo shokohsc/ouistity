@@ -1,6 +1,6 @@
 <template>
   <progress v-if="!loaded" class="progress" max="100">80%</progress>
-  <div class="page is-align-items-center">
+  <div class="page">
     <div @click="previousPage" class="previous" />
     <div @click="fullscreen" class="fullscreen" />
     <div @click="close" class="close" />
@@ -208,8 +208,7 @@ progress.progress:indeterminate {
   width: 100%;
 }
 img.loading {
-  opacity: 1;
-  transition: opacity 1s linear;
+  transition: opacity 0.5s linear;
 }
 .pages {
   position: absolute;

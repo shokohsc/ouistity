@@ -10,29 +10,32 @@ spec:
         - name: ouistity
           image: shokohsc/ouistity
           args:
-            - dev-sync
+            - dev-serve
           ports:
-            - name: dev
-              containerPort: 3000
+            - name: serve
+              containerPort: 5000
               protocol: TCP
-            - name: browser-sync
-              containerPort: 3002
-              protocol: TCP
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - update-ca-certificates
-          volumeMounts:
-          - mountPath: /usr/local/share/ca-certificates
-            name: tls
-      volumes:
-        - name: tls
-          csi:
-            driver: csi.cert-manager.io
-            volumeAttributes:
-                  csi.cert-manager.io/issuer-name: ca-cluster-issuer
-                  csi.cert-manager.io/issuer-kind: ClusterIssuer
-                  csi.cert-manager.io/is-ca: "true"
+      #       - name: dev
+      #         containerPort: 3000
+      #         protocol: TCP
+      #       - name: browser-sync
+      #         containerPort: 3002
+      #         protocol: TCP
+      #     lifecycle:
+      #       postStart:
+      #         exec:
+      #           command:
+      #             - /bin/sh
+      #             - -c
+      #             - update-ca-certificates
+      #     volumeMounts:
+      #     - mountPath: /usr/local/share/ca-certificates
+      #       name: tls
+      # volumes:
+      #   - name: tls
+      #     csi:
+      #       driver: csi.cert-manager.io
+      #       volumeAttributes:
+      #             csi.cert-manager.io/issuer-name: ca-cluster-issuer
+      #             csi.cert-manager.io/issuer-kind: ClusterIssuer
+      #             csi.cert-manager.io/is-ca: "true"

@@ -21,6 +21,16 @@ spec:
             name: ouistity
             port:
               number: 80
+  - host: preview.ouistity.shokohsc.home
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ouistity
+            port:
+              number: 5000
   # - host: dev.ouistity.shokohsc.home
   #   http:
   #     paths:
@@ -44,6 +54,7 @@ spec:
   tls:
   - hosts:
     - ouistity.shokohsc.home
+    - preview.ouistity.shokohsc.home
     # - dev.ouistity.shokohsc.home
     # - browsersync.ouistity.shokohsc.home
     secretName: ouistity-cert

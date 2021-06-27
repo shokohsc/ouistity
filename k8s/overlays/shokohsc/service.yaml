@@ -5,11 +5,15 @@ metadata:
   name: ouistity
 spec:
   ports:
-    - port: 3000
-      targetPort: dev
+    - port: 5000
+      targetPort: serve
       protocol: TCP
-      name: dev
-    - port: 3002
-      targetPort: browser-sync
-      protocol: TCP
-      name: browser-sync
+      name: serve
+    # - port: 3000
+    #   targetPort: dev
+    #   protocol: TCP
+    #   name: dev
+    # - port: 3002
+    #   targetPort: browser-sync
+    #   protocol: TCP
+    #   name: browser-sync
