@@ -1,11 +1,11 @@
 <template>
   <progress v-if="!loaded" class="progress" max="100">80%</progress>
-  <div class="page">
+  <div class="page is-justify-content-center is-align-items-center">
     <div @click="previousPage" class="previous" />
     <div @click="fullscreen" class="fullscreen" />
     <div @click="close" class="close" />
     <div @click="nextPage" class="next" />
-    <img id=page v-if="!loading" @load="enhance" :src="image" class="loading" />
+    <img id=page v-if="!loading" @load="enhance" :src="imageUrl" class="loading" />
     <p class="pages glow">{{ currentPage }} / {{ total }}</p>
   </div>
 </template>
@@ -30,7 +30,13 @@
       api: function() {
         return window.location.protocol + '//api.' + window.location.hostname;
       },
-      image: function() {
+      height: function() {
+        return window.screen.availHeight;
+      },
+      width: function() {
+        return window.screen.availWidth;
+      },
+      imageUrl: function() {
         return (this.useThumbor ? (this.loaded ? this.highRes : this.lowRes) + 'http://api:5000' : this.api) + (this.total > 0 ? this.pages[this.index].image : '/');
       }
     },
@@ -200,6 +206,7 @@ progress.progress:indeterminate {
   top: 0;
   left: 0;
   position: absolute;
+  display: flex;
   height: 100%;
   width: 100%;
   z-index: 5;
@@ -215,7 +222,7 @@ img.loading {
   top: 0;
   left: 0;
   width: 100%;
-  opacity: 0.2;
+  opacity: 0.1;
   pointer-events: none;
   font-family: monospace;
 }

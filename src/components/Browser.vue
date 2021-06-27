@@ -1,7 +1,16 @@
 <template>
     <progress v-if="loading" class="progress" max="100">10%</progress>
     <div class="columns is-justify-content-center is-mobile" v-bind="$attrs">
-      <div class="column is-8">
+      <div class="column is-narrow">
+        <router-link to="/" >
+          <button class="button is-large">
+            <span class="icon">
+              <i class="fas fa-home"></i>
+            </span>
+          </button>
+        </router-link>
+      </div>
+      <div class="column is-6">
         <input v-model="q" class="input is-large has-text-black has-background-grey" type="text" placeholder="Search..." />
       </div>
       <div class="column is-narrow">
