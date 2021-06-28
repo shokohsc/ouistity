@@ -3,10 +3,41 @@
   <div v-if="metadataLoaded" class="page is-justify-content-center is-align-items-center" :style="{ 'height': divHeight + 'px' }">
     <div @click="previousPage" class="previous" />
     <div @click="fullscreen" class="fullscreen" />
+    <div @click="modal" class="options" />
     <div @click="close" class="close" />
     <div @click="nextPage" class="next" />
     <img @load="enhance" :src="imageUrl" id="page" class="loading" :style="{ 'height': imageHeight + 'px' }" />
     <p class="pages glow">{{ currentPage }} / {{ total }}</p>
+  </div>
+  <div class="modal">
+    <div class="modal-background" @click="hide"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Menu</p>
+        <button class="delete" aria-label="close" @click="hide"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="columns is-justify-content-center">
+          <div class="column is-narrow">
+            <div class="select">
+              <select v-model="page">
+                <option :value="i" v-for="(p, i) in pages" :key="i">{{ i + 1 }}/{{ total }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="column is-narrow">
+            <button class="button" @click="skip">Go</button>
+          </div>
+          <div class="column is-narrow">
+            <button class="button" @click="close">Close</button>
+          </div>
+        </div>
+      </section>
+      <!-- <footer class="modal-card-foot">
+        <button class="button is-success" >Save changes</button>
+        <button class="button" @click="hide">Cancel</button>
+      </footer> -->
+    </div>
   </div>
 </template>
 
@@ -61,6 +92,7 @@
         enhanced: false,
         useThumbor: true,
         index: 0,
+        page: 0,
         pages: [],
         pageMeta: {},
       }
@@ -74,6 +106,7 @@
           this.pages = []
           await this.fetchData()
           this.index = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
+          this.page = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
           window.localStorage.setItem(this.$route.params.urn, this.index)
           this.metadata()
         },
@@ -87,6 +120,19 @@
       }
     },
     methods: {
+      modal: function() {
+        const modal = document.querySelector('.modal')
+        modal.classList.add('is-active');
+      },
+      hide: function() {
+        const modal = document.querySelector('.modal')
+        modal.classList.remove('is-active');
+      },
+      async skip() {
+        const modal = document.querySelector('.modal')
+        modal.classList.remove('is-active');
+        await this.turnPage(parseInt(this.page));
+      },
       close: function() {
         this.loading = true;
         if (document.fullscreenElement && document.exitFullscreen) {
@@ -104,21 +150,17 @@
         }
       },
       async nextPage() {
-        this.loaded = this.useThumbor ? false : true;
-        this.enhanced = false;
-        self.metadataLoaded = false;
-        this.index = this.index < this.pages.length ? parseInt(this.index) + 1 : this.index;
-        await this.metadata()
-        window.localStorage.setItem(this.$route.params.urn, this.index)
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-        document.getElementById('page').classList.add('is-hidden')
+        await this.turnPage(parseInt(this.index < this.pages.length ? parseInt(this.index) + 1 : this.index));
       },
       async previousPage() {
+        await this.turnPage(parseInt(this.index > 0 ? parseInt(this.index) - 1 : this.index));
+      },
+      async turnPage(page = 0) {
         this.loaded = this.useThumbor ? false : true;
         this.enhanced = false;
         self.metadataLoaded = false;
-        this.index = parseInt(this.index > 0 ? parseInt(this.index) - 1 : this.index);
+        this.index = page;
+        this.page = page
         await this.metadata()
         window.localStorage.setItem(this.$route.params.urn, this.index)
         document.body.scrollTop = 0; // For Safari
@@ -212,22 +254,33 @@ progress.progress:indeterminate {
   left: 20%;
   top: 0;
   z-index: 10;
-  height: 50%;
+  height: 25%;
   width: 60%;
   cursor: zoom-in;
   /* opacity: 0.5;
-  background-color: #F00; */
+  background-color: #0F0; */
+}
+.options {
+  position: fixed;
+  left: 20%;
+  top: 25%;
+  z-index: 10;
+  height: 50%;
+  width: 60%;
+  cursor: context-menu;
+  /* opacity: 0.5;
+  background-color: #00F; */
 }
 .close {
   position: fixed;
   left: 20%;
-  top: 50%;
+  top: 75%;
   z-index: 10;
-  height: 50%;
+  height: 25%;
   width: 60%;
   cursor: not-allowed;
   /* opacity: 0.5;
-  background-color: #0F0; */
+  background-color: #FF0; */
 }
 .next {
   position: fixed;
@@ -238,7 +291,7 @@ progress.progress:indeterminate {
   width: 20%;
   cursor: e-resize;
   /* opacity: 0.5;
-  background-color: #00F; */
+  background-color: #0FF; */
 }
 .page {
   top: 0;
