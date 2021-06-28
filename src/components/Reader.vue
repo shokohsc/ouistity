@@ -25,18 +25,18 @@
               </select>
             </div>
           </div>
-          <div class="column is-narrow">
-            <button class="button" @click="skip">Go</button>
-          </div>
-          <div class="column is-narrow">
-            <button class="button" @click="close">Close</button>
-          </div>
         </div>
       </section>
-      <!-- <footer class="modal-card-foot">
-        <button class="button is-success" >Save changes</button>
-        <button class="button" @click="hide">Cancel</button>
-      </footer> -->
+      <footer class="modal-card-foot">
+        <div class="columns is-justify-content-center">
+          <div class="column is-narrow">
+            <button class="button is-primary" @click="skip">Go</button>
+          </div>
+          <div class="column is-narrow">
+            <button class="button is-danger" @click="close">Close</button>
+          </div>
+        </div>
+      </footer>
     </div>
   </div>
 </template>
