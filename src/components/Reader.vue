@@ -1,6 +1,6 @@
 <template>
   <progress v-if="loading" class="progress" max="100">15%</progress>
-  <div v-if="metadataLoaded" class="page is-justify-content-center is-align-items-center" :style="{ 'height': divHeight + 'px' }">
+  <div v-touch:swipe.left="nextPage" v-touch:swipe.right="previousPage" v-if="metadataLoaded" class="page is-justify-content-center is-align-items-center" :style="{ 'height': divHeight + 'px' }">
     <div @click="previousPage" class="previous" />
     <div @click="fullscreen" class="fullscreen" />
     <div @click="modal" class="options" />
@@ -36,13 +36,13 @@
       <footer class="modal-card-foot is-justify-content-center">
         <div class="columns">
           <div class="column">
-            <button class="button is-primary" @click="skip">Go</button>
+            <button class="button is-fullwidth is-primary" @click="skip">Go</button>
           </div>
           <div class="column">
-            <button class="button" @click="hide">Hide</button>
+            <button class="button is-fullwidth" @click="hide">Hide</button>
           </div>
           <div class="column">
-            <button class="button is-danger" @click="close">Close</button>
+            <button class="button is-fullwidth is-danger" @click="close">Close</button>
           </div>
         </div>
       </footer>
@@ -130,6 +130,7 @@
         return parseInt(this.index) === parseInt(item) ? 'displayed' : 'is-hidden'
       },
       modal: function() {
+        this.page = this.index
         const modal = document.querySelector('.modal')
         modal.classList.add('is-active');
       },
@@ -174,9 +175,10 @@
           document.body.scrollTop = 0; // For Safari
           document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
           const el = document.getElementById(`page-${page}`)
-          const src = this.imageSource(this.pages[this.index].image)
-          if (!el.hasAttribute('src'))
+          if (el && !el.hasAttribute('src')) {
+            const src = this.imageSource(this.pages[this.index].image)
             el.setAttribute('src', src)
+          }
           this.preload(page)
         }
       },
@@ -184,9 +186,10 @@
         page = parseInt(page) + 1
         if (this.pages[page] && page < (parseInt(this.index) + 3)) {
           const el = document.getElementById(`page-${page}`)
-          const src = el.getAttribute('data-src')
-          if (!el.hasAttribute('src'))
+          if (el && !el.hasAttribute('src')) {
+            const src = el.getAttribute('data-src')
             el.setAttribute('src', src)
+          }
         }
       },
       keyUp: function(event) {
