@@ -1,12 +1,18 @@
 <template>
-  <progress v-if="!loaded" class="progress" max="100">15%</progress>
+  <progress v-if="loading" class="progress" max="100">15%</progress>
   <div v-if="metadataLoaded" class="page is-justify-content-center is-align-items-center" :style="{ 'height': divHeight + 'px' }">
     <div @click="previousPage" class="previous" />
     <div @click="fullscreen" class="fullscreen" />
     <div @click="modal" class="options" />
     <div @click="close" class="close" />
     <div @click="nextPage" class="next" />
-    <img @load="enhance" :src="imageUrl" id="page" class="loading" :style="{ 'height': imageHeight + 'px' }" />
+    <img v-for="(source, i) in pages" :key="i"
+      @load="preload(i, $event)"
+      :data-src="imageSource(source.image)"
+      :id="`page-${i}`"
+      :class="displayClass(i)"
+      :style="{ 'height': imageHeight + 'px' }"
+    />
     <p class="pages glow">{{ currentPage }} / {{ total }}</p>
   </div>
   <div class="modal">
@@ -27,12 +33,15 @@
           </div>
         </div>
       </section>
-      <footer class="modal-card-foot">
-        <div class="columns is-justify-content-center">
-          <div class="column is-narrow">
+      <footer class="modal-card-foot is-justify-content-center">
+        <div class="columns">
+          <div class="column">
             <button class="button is-primary" @click="skip">Go</button>
           </div>
-          <div class="column is-narrow">
+          <div class="column">
+            <button class="button" @click="hide">Hide</button>
+          </div>
+          <div class="column">
             <button class="button is-danger" @click="close">Close</button>
           </div>
         </div>
@@ -52,14 +61,11 @@
       total: function() {
         return this.pages.length;
       },
-      lowRes: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/smart/filters:quality(20)/';
-      },
-      highRes: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/smart/filters:quality(80)/';
-      },
       api: function() {
         return window.location.protocol + '//api.' + window.location.hostname;
+      },
+      thumbor: function() {
+        return window.location.protocol + '//thumbor.' + window.location.hostname;
       },
       height: function() {
         return window.innerHeight;
@@ -68,33 +74,30 @@
         return window.screen.availWidth;
       },
       metaUrl: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/meta/smart/filters:quality(80)/' + 'http://api:5000' + this.pages[this.index].image;
+        return this.thumbor + '/unsafe/meta/smart/filters:quality(80)/' + 'http://api:5000' + this.pages[this.index].image;
       },
       divHeight: function() {
         if (this.useThumbor) {
           return Math.floor(this.imageHeight > this.height ? this.imageHeight : this.height);
         }
       },
-      imageHeight: function() {
-        if (this.pageMeta.target && this.useThumbor) {
-          return Math.floor((this.pageMeta.target.height * this.width) / this.pageMeta.target.width);
-        }
+      highRes: function() {
+        return this.thumbor + '/unsafe/smart/filters:quality(100)/';
       },
-      imageUrl: function() {
-        return (this.useThumbor ? (this.enhanced ? this.highRes : this.lowRes) + 'http://api:5000' : this.api) + (this.total > 0 ? this.pages[this.index].image : '/');
+      imageHeight: function() {
+        if (this.useThumbor && this.pages[this.index].metadata) {
+          return Math.floor((this.pages[this.index].metadata.target.height * this.width) / this.pages[this.index].metadata.target.width);
+        }
       }
     },
     data() {
       return {
         loading: true,
-        loaded: false,
         metadataLoaded: false,
-        enhanced: false,
         useThumbor: true,
         index: 0,
         page: 0,
         pages: [],
-        pageMeta: {},
       }
     },
     created() {
@@ -108,7 +111,7 @@
           this.index = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
           this.page = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
           window.localStorage.setItem(this.$route.params.urn, this.index)
-          this.metadata()
+          this.turnPage(this.index)
         },
         { immediate: true }
       )
@@ -120,6 +123,12 @@
       }
     },
     methods: {
+      imageSource: function(url) {
+        return (this.useThumbor ? this.highRes + 'http://api:5000' : this.api) + (this.total > 0 ? url : '');
+      },
+      displayClass: function(item) {
+        return parseInt(this.index) === parseInt(item) ? 'displayed' : 'is-hidden'
+      },
       modal: function() {
         const modal = document.querySelector('.modal')
         modal.classList.add('is-active');
@@ -150,22 +159,35 @@
         }
       },
       async nextPage() {
-        await this.turnPage(parseInt(this.index < this.pages.length ? parseInt(this.index) + 1 : this.index));
+        await this.turnPage(parseInt(this.index) + 1);
       },
       async previousPage() {
-        await this.turnPage(parseInt(this.index > 0 ? parseInt(this.index) - 1 : this.index));
+        await this.turnPage(parseInt(this.index) - 1);
       },
       async turnPage(page = 0) {
-        this.loaded = this.useThumbor ? false : true;
-        this.enhanced = false;
-        self.metadataLoaded = false;
-        this.index = page;
-        this.page = page
-        await this.metadata()
-        window.localStorage.setItem(this.$route.params.urn, this.index)
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-        document.getElementById('page').classList.add('is-hidden')
+        if (this.pages[page]) {
+          self.metadataLoaded = false
+          this.index = page
+          this.page = page
+          await this.metadata()
+          window.localStorage.setItem(this.$route.params.urn, this.index)
+          document.body.scrollTop = 0; // For Safari
+          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+          const el = document.getElementById(`page-${page}`)
+          const src = this.imageSource(this.pages[this.index].image)
+          if (!el.hasAttribute('src'))
+            el.setAttribute('src', src)
+          this.preload(page)
+        }
+      },
+      preload: function(page, e = null) {
+        page = parseInt(page) + 1
+        if (this.pages[page] && page < (parseInt(this.index) + 3)) {
+          const el = document.getElementById(`page-${page}`)
+          const src = el.getAttribute('data-src')
+          if (!el.hasAttribute('src'))
+            el.setAttribute('src', src)
+        }
       },
       keyUp: function(event) {
         switch (event.keyCode) {
@@ -186,14 +208,6 @@
             break;
         }
       },
-      enhance(e) {
-        this.enhanced = true
-        this.loaded = true
-        const page = document.getElementById('page')
-        if (page) {
-          page.classList.remove('is-hidden')
-        }
-      },
       async fetchData() {
         this.loading = true
 
@@ -211,12 +225,14 @@
           });
       },
       async metadata() {
+        if (this.pages[this.index].metadata)
+          return this.pages[this.index].metadata
         const self = this;
         return await fetch(this.metaUrl)
           .then(response => response.json())
           .then(data => {
-            self.pageMeta = data.thumbor;
-            self.metadataLoaded = true;
+            this.pages[this.index].metadata = data.thumbor
+            self.metadataLoaded = true
           })
           .catch(error => {
             console.log(error);
@@ -304,8 +320,12 @@ progress.progress:indeterminate {
 .page img {
   width: 100%;
 }
-img.loading {
-  transition: opacity 0.5s linear;
+img.hidden {
+  opacity: 0;
+}
+img.displayed {
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
 }
 .pages {
   position: absolute;
