@@ -1,59 +1,57 @@
 <template>
-  <div>
-    <progress v-if="loading" class="progress" max="100">15%</progress>
-    <div
-      v-touch:swipe.left="nextPage"
-      v-touch:swipe.right="previousPage"
-      v-if="metadataLoaded"
-      class="page is-justify-content-center is-align-items-center"
-      :style="{ 'height': divHeight + 'px' }"
-    >
-      <div @click="previousPage" class="previous" />
-      <div @click="fullscreen" class="fullscreen" />
-      <div @click="modal" class="options" />
-      <div @click="close" class="close" />
-      <div @click="nextPage" class="next" />
-      <img v-for="(source, i) in pages" :key="i"
-        @load="preload(i, $event)"
-        :data-src="imageSource(source.image)"
-        :id="`page-${i}`"
-        :class="displayClass(i)"
-        :style="{ 'height': imageHeight + 'px' }"
-      />
-      <p class="pages glow">{{ currentPage }} / {{ total }}</p>
-    </div>
-    <div class="modal">
-      <div class="modal-background" @click="hide"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Menu</p>
-          <button class="delete" aria-label="close" @click="hide"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="columns is-justify-content-center">
-            <div class="column is-narrow">
-              <div class="select">
-                <select v-model="page">
-                  <option :value="i" v-for="(p, i) in pages" :key="i">{{ i + 1 }}/{{ total }}</option>
-                </select>
-              </div>
+  <progress v-if="loading" class="progress" max="100">15%</progress>
+  <div
+    v-touch:swipe.left="nextPage"
+    v-touch:swipe.right="previousPage"
+    v-if="metadataLoaded"
+    class="page is-justify-content-center is-align-items-center"
+    :style="{ 'height': divHeight + 'px' }"
+  >
+    <div @click="previousPage" class="previous" />
+    <div @click="fullscreen" class="fullscreen" />
+    <div @click="modal" class="options" />
+    <div @click="close" class="close" />
+    <div @click="nextPage" class="next" />
+    <img v-for="(source, i) in pages" :key="i"
+      @load="preload(i, $event)"
+      :data-src="imageSource(source.image)"
+      :id="`page-${i}`"
+      :class="displayClass(i)"
+      :style="{ 'height': imageHeight + 'px' }"
+    />
+    <p class="pages glow">{{ currentPage }} / {{ total }}</p>
+  </div>
+  <div class="modal">
+    <div class="modal-background" @click="hide"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Menu</p>
+        <button class="delete" aria-label="close" @click="hide"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="columns is-justify-content-center">
+          <div class="column is-narrow">
+            <div class="select">
+              <select v-model="page">
+                <option :value="i" v-for="(p, i) in pages" :key="i">{{ i + 1 }}/{{ total }}</option>
+              </select>
             </div>
           </div>
-        </section>
-        <footer class="modal-card-foot is-justify-content-center">
-          <div class="columns">
-            <div class="column">
-              <button class="button is-fullwidth is-primary" @click="skip">Go</button>
-            </div>
-            <div class="column">
-              <button class="button is-fullwidth" @click="hide">Hide</button>
-            </div>
-            <div class="column">
-              <button class="button is-fullwidth is-danger" @click="close">Close</button>
-            </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot is-justify-content-center">
+        <div class="columns">
+          <div class="column">
+            <button class="button is-fullwidth is-primary" @click="skip">Go</button>
           </div>
-        </footer>
-      </div>
+          <div class="column">
+            <button class="button is-fullwidth" @click="hide">Hide</button>
+          </div>
+          <div class="column">
+            <button class="button is-fullwidth is-danger" @click="close">Close</button>
+          </div>
+        </div>
+      </footer>
     </div>
   </div>
 </template>
