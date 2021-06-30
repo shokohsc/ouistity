@@ -1,51 +1,59 @@
 <template>
-  <progress v-if="loading" class="progress" max="100">15%</progress>
-  <div v-touch:swipe.left="nextPage" v-touch:swipe.right="previousPage" v-if="metadataLoaded" class="page is-justify-content-center is-align-items-center" :style="{ 'height': divHeight + 'px' }">
-    <div @click="previousPage" class="previous" />
-    <div @click="fullscreen" class="fullscreen" />
-    <div @click="modal" class="options" />
-    <div @click="close" class="close" />
-    <div @click="nextPage" class="next" />
-    <img v-for="(source, i) in pages" :key="i"
-      @load="preload(i, $event)"
-      :data-src="imageSource(source.image)"
-      :id="`page-${i}`"
-      :class="displayClass(i)"
-      :style="{ 'height': imageHeight + 'px' }"
-    />
-    <p class="pages glow">{{ currentPage }} / {{ total }}</p>
-  </div>
-  <div class="modal">
-    <div class="modal-background" @click="hide"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Menu</p>
-        <button class="delete" aria-label="close" @click="hide"></button>
-      </header>
-      <section class="modal-card-body">
-        <div class="columns is-justify-content-center">
-          <div class="column is-narrow">
-            <div class="select">
-              <select v-model="page">
-                <option :value="i" v-for="(p, i) in pages" :key="i">{{ i + 1 }}/{{ total }}</option>
-              </select>
+  <div>
+    <progress v-if="loading" class="progress" max="100">15%</progress>
+    <div
+      v-touch:swipe.left="nextPage"
+      v-touch:swipe.right="previousPage"
+      v-if="metadataLoaded"
+      class="page is-justify-content-center is-align-items-center"
+      :style="{ 'height': divHeight + 'px' }"
+    >
+      <div @click="previousPage" class="previous" />
+      <div @click="fullscreen" class="fullscreen" />
+      <div @click="modal" class="options" />
+      <div @click="close" class="close" />
+      <div @click="nextPage" class="next" />
+      <img v-for="(source, i) in pages" :key="i"
+        @load="preload(i, $event)"
+        :data-src="imageSource(source.image)"
+        :id="`page-${i}`"
+        :class="displayClass(i)"
+        :style="{ 'height': imageHeight + 'px' }"
+      />
+      <p class="pages glow">{{ currentPage }} / {{ total }}</p>
+    </div>
+    <div class="modal">
+      <div class="modal-background" @click="hide"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Menu</p>
+          <button class="delete" aria-label="close" @click="hide"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="columns is-justify-content-center">
+            <div class="column is-narrow">
+              <div class="select">
+                <select v-model="page">
+                  <option :value="i" v-for="(p, i) in pages" :key="i">{{ i + 1 }}/{{ total }}</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-      <footer class="modal-card-foot is-justify-content-center">
-        <div class="columns">
-          <div class="column">
-            <button class="button is-fullwidth is-primary" @click="skip">Go</button>
+        </section>
+        <footer class="modal-card-foot is-justify-content-center">
+          <div class="columns">
+            <div class="column">
+              <button class="button is-fullwidth is-primary" @click="skip">Go</button>
+            </div>
+            <div class="column">
+              <button class="button is-fullwidth" @click="hide">Hide</button>
+            </div>
+            <div class="column">
+              <button class="button is-fullwidth is-danger" @click="close">Close</button>
+            </div>
           </div>
-          <div class="column">
-            <button class="button is-fullwidth" @click="hide">Hide</button>
-          </div>
-          <div class="column">
-            <button class="button is-fullwidth is-danger" @click="close">Close</button>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   </div>
 </template>
@@ -81,13 +89,14 @@
           return Math.floor(this.imageHeight > this.height ? this.imageHeight : this.height);
         }
       },
-      highRes: function() {
-        return this.thumbor + '/unsafe/smart/filters:quality(100)/';
-      },
       imageHeight: function() {
         if (this.useThumbor && this.pages[this.index].metadata) {
           return Math.floor((this.pages[this.index].metadata.target.height * this.width) / this.pages[this.index].metadata.target.width);
         }
+        return 0;
+      },
+      highRes: function() {
+        return this.thumbor + '/unsafe/smart/filters:quality(100)/';
       }
     },
     data() {
@@ -103,6 +112,7 @@
     created() {
       window.scrollTo(0, 0);
       window.addEventListener('keyup', this.keyUp);
+      window.addEventListener('resize', this.update);
       this.$watch(
         () => this.$route.query.page,
         async () => {
@@ -118,16 +128,20 @@
     },
     destroyed: function() {
       window.removeEventListener('keyup', this.keyUp);
+      window.removeEventListener('resize', this.update);
       if (document.fullscreenElement && document.exitFullscreen) {
         document.exitFullscreen();
       }
     },
     methods: {
+      update: function(e) {
+        this.$forceUpdate()
+      },
       imageSource: function(url) {
         return (this.useThumbor ? this.highRes + 'http://api:5000' : this.api) + (this.total > 0 ? url : '');
       },
       displayClass: function(item) {
-        return parseInt(this.index) === parseInt(item) ? 'displayed' : 'is-hidden'
+        return parseInt(this.index) === parseInt(item) ? 'displayed' : 'hidden'
       },
       modal: function() {
         this.page = this.index
@@ -325,10 +339,14 @@ progress.progress:indeterminate {
 }
 img.hidden {
   opacity: 0;
+  visibility: hidden;
+  width: 0;
 }
 img.displayed {
   opacity: 1;
-  transition: opacity 0.5s ease-out;
+  visibility: visible;
+  transition: visibility 1s ease-out, opacity 1s ease-out;
+  width: 100%;
 }
 .pages {
   position: absolute;
