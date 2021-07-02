@@ -5,7 +5,15 @@ metadata:
 build:
   artifacts:
   - image: shokohsc/ouistity
+    docker:
+      dockerfile: Dockerfile.dev
     context: .
+    sync:
+      manual:
+      - src: 'src/**/*.js'
+        dest: .
+      - src: 'src/**/*.vue'
+        dest: .
 deploy:
   kustomize:
     paths:
@@ -17,26 +25,18 @@ profiles:
     build:
       artifacts:
       - image: shokohsc/ouistity
-        docker:
-          dockerfile: Dockerfile.dev
-        sync:
-          manual:
-          - src: 'src/**/*.js'
-            dest: .
-          - src: 'src/**/*.vue'
-            dest: .
   - name: shokohsc
     build:
+      cluster:
+        namespace: kaniko
+        pullSecretName: kaniko-secret
+        dockerConfig:
+          # path: ~/.docker/config.json
+          secretName: kaniko-secret
       artifacts:
       - image: shokohsc/ouistity
-        docker:
+        kaniko:
           dockerfile: Dockerfile.dev
-        sync:
-          manual:
-          - src: 'src/**/*.js'
-            dest: .
-          - src: 'src/**/*.vue'
-            dest: .
     deploy:
       kustomize:
         paths:
