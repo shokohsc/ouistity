@@ -41,3 +41,14 @@ profiles:
       kustomize:
         paths:
           - k8s/overlays/shokohsc
+  - name: prod
+    build:
+      cluster:
+        namespace: kaniko
+        pullSecretName: kaniko-secret
+        dockerConfig:
+          secretName: kaniko-secret
+      artifacts:
+      - image: shokohsc/ouistity
+        kaniko:
+          dockerfile: Dockerfile
