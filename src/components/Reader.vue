@@ -243,7 +243,7 @@
         if (this.pages[this.index].metadata)
           return this.pages[this.index].metadata
         const self = this;
-        return await fetch(this.metaUrl)
+        return await fetch(this.metaUrl, {mode: `no-cors`})
           .then(response => response.json())
           .then(data => {
             this.pages[this.index].metadata = data.thumbor
