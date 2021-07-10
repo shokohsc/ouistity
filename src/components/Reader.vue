@@ -80,7 +80,7 @@
         return window.screen.availWidth;
       },
       metaUrl: function() {
-        return this.thumbor + '/unsafe/meta/smart/filters:quality(80)/' + 'http://api:5000' + this.pages[this.index].image;
+        return this.thumbor + '/unsafe/meta/smart/filters:quality(80)/' + 'http://api.comics:5000' + this.pages[this.index].image;
       },
       divHeight: function() {
         if (this.useThumbor) {
