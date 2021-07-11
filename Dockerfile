@@ -8,11 +8,13 @@ RUN chmod +x /usr/bin/jq
 
 WORKDIR /app
 COPY package*.json ./
-RUN apk add --no-cache bash gettext ca-certificates && \
+RUN apk add --no-cache bash && \
     npm install
+
 COPY . .
-RUN jq 'to_entries | map_values({ (.key) : ("$" + .key) }) | reduce .[] as $item ({}; . + $item)' ./src/config.json > ./src/config.tmp.json && mv ./src/config.tmp.json ./src/config.json
-RUN npm run build
+RUN jq 'to_entries | map_values({ (.key) : ("$" + .key) }) | reduce .[] as $item ({}; . + $item)' ./src/config.json > ./src/config.tmp.json && \
+    mv ./src/config.tmp.json ./src/config.json && \
+    npm run build
 
 # production stage
 FROM nginx:stable

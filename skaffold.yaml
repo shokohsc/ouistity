@@ -52,3 +52,10 @@ profiles:
       - image: shokohsc/ouistity
         kaniko:
           dockerfile: Dockerfile
+          buildArgs:
+            ENV: production
+            API_GATEWAY_HOST: api.comics.${domain}
+            GRAPHQL_GATEWAY_HOST: apollo.comics.${domain}
+            USE_THUMBOR: "true"
+            THUMBOR_HOST: thumbor.${domain}
+            THUMBOR_API_GATEWAY_URL: "http://api.comics:5000"
