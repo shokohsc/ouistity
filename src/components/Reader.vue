@@ -57,7 +57,9 @@
 </template>
 
 <script>
+  import axios from 'axios';
   import graphql from '../api';
+  import Config from "../config.json";
 
   export default {
     computed: {
@@ -68,10 +70,10 @@
         return this.pages.length;
       },
       api: function() {
-        return window.location.protocol + '//api.' + window.location.hostname;
+        return window.location.protocol + '//' + Config.API_GATEWAY_HOST;
       },
       thumbor: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname;
+        return window.location.protocol + '//' + Config.THUMBOR_HOST;
       },
       height: function() {
         return window.innerHeight;
@@ -136,7 +138,7 @@
         this.$forceUpdate()
       },
       imageSource: function(url) {
-        return (this.useThumbor ? this.highRes + 'http://api:5000' : this.api) + (this.total > 0 ? url : '');
+        return (this.useThumbor ? this.highRes + 'http://api.comics:5000' : this.api) + (this.total > 0 ? url : '');
       },
       displayClass: function(item) {
         return parseInt(this.index) === parseInt(item) ? 'displayed' : 'hidden'
@@ -243,7 +245,8 @@
         if (this.pages[this.index].metadata)
           return this.pages[this.index].metadata
         const self = this;
-        return await fetch(this.metaUrl, {mode: `no-cors`})
+
+        return await fetch(this.metaUrl)
           .then(response => response.json())
           .then(data => {
             this.pages[this.index].metadata = data.thumbor

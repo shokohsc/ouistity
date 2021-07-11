@@ -11,6 +11,27 @@ spec:
           image: shokohsc/ouistity
           args:
             - dev-serve
+          env:
+            - name: ENV
+              value: development
+            - name: BASE_HOST
+              value: localhost
+            - name: BASE_PORT
+              value: "80"
+            - name: API_GATEWAY_HOST
+              value: api.comics.shokohsc.home
+            - name: API_GATEWAY_PORT
+              value: "80"
+            - name: GRAPHQL_GATEWAY_HOST
+              value: apollo.comics.shokohsc.home
+            - name: GRAPHQL_GATEWAY_PORT
+              value: "80"
+            - name: THUMBOR_HOST
+              value: thumbor.comics.shokohsc.home
+            - name: THUMBOR_PORT
+              value: "80"
+            - name: USE_THUMBOR
+              value: "true"
           ports:
             - name: serve
               containerPort: 5000

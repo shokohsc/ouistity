@@ -1,13 +1,13 @@
 import axios from 'axios';
+import Config from "../config.json";
 
 const graphqlConfig = {
   protocol: window.location.protocol,
-  host: 'apollo' + '.' + window.location.hostname,
-  port: "443"
+  host: Config.GRAPHQL_GATEWAY_HOST
 };
 
 const graphql = axios.create({
-  baseURL: graphqlConfig.protocol + '//' + graphqlConfig.host + ':' + graphqlConfig.port + '/'
+  baseURL: graphqlConfig.protocol + '//' + graphqlConfig.host + '/'
   // timeout: 500
 });
 

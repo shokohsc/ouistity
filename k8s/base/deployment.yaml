@@ -17,6 +17,23 @@ spec:
       containers:
         - name: ouistity
           image: shokohsc/ouistity
+          env:
+            - name: ENV
+              value: production
+            - name: BASE_HOST
+              value: localhost
+            - name: BASE_PORT
+              value: "80"
+            - name: API_GATEWAY_HOST
+              value: api.cluster.local
+            - name: API_GATEWAY_PORT
+              value: "80"
+            - name: GRAPHQL_GATEWAY_HOST
+              value: graphql.cluster.local
+            - name: GRAPHQL_GATEWAY_PORT
+              value: "80"
+            - name: USE_THUMBOR
+              value: "false"
           ports:
             - name: http
               containerPort: 80

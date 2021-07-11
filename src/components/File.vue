@@ -19,17 +19,18 @@
 
 <script>
   import defaultCover from '../assets/marvel_default.jpg'
+  import Config from "../config.json";
 
   export default {
     computed: {
       lowRes: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/filters:quality(40)/';
+        return window.location.protocol + '//' + Config.THUMBOR_HOST + '/unsafe/216x324/smart/filters:quality(40)/';
       },
       highRes: function() {
-        return window.location.protocol + '//thumbor.' + window.location.hostname + '/unsafe/216x324/smart/filters:quality(100)/';
+        return window.location.protocol + '//' + Config.THUMBOR_HOST + '/unsafe/216x324/smart/filters:quality(100)/';
       },
       api: function() {
-        return window.location.protocol + '//api.' + window.location.hostname;
+        return window.location.protocol + '//' + Config.API_GATEWAY_HOST;
       },
       image: function() {
         if (!this.file.cover) {
