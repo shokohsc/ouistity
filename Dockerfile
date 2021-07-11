@@ -8,14 +8,13 @@ RUN chmod +x /usr/bin/jq
 
 WORKDIR /app
 COPY package*.json ./
-RUN apk add --no-cache bash gettext && \
-    npm install
+RUN npm install
 COPY . .
 RUN jq 'to_entries | map_values({ (.key) : ("$" + .key) }) | reduce .[] as $item ({}; . + $item)' ./src/config.json > ./src/config.tmp.json && mv ./src/config.tmp.json ./src/config.json
 RUN npm run build
 
 # production stage
-FROM nginx:alpine
+FROM nginx:stable
 ENV JSFOLDER=/usr/share/nginx/html/js/*.json
 COPY ./start-nginx.sh /usr/bin/start-nginx.sh
 RUN chmod +x /usr/bin/start-nginx.sh
