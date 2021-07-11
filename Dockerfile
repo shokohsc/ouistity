@@ -8,7 +8,8 @@ RUN chmod +x /usr/bin/jq
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN apk add --no-cache bash gettext && \
+    npm install
 COPY . .
 RUN jq 'to_entries | map_values({ (.key) : ("$" + .key) }) | reduce .[] as $item ({}; . + $item)' ./src/config.json > ./src/config.tmp.json && mv ./src/config.tmp.json ./src/config.json
 RUN npm run build
