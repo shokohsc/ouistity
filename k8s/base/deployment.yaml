@@ -20,10 +20,6 @@ spec:
           env:
             - name: ENV
               value: production
-            - name: BASE_HOST
-              value: localhost
-            - name: BASE_PORT
-              value: "80"
             - name: API_GATEWAY_HOST
               value: api.cluster.local
             - name: API_GATEWAY_PORT

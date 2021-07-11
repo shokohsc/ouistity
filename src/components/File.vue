@@ -36,7 +36,7 @@
         if (!this.file.cover) {
           return defaultCover;
         }
-        return (this.useThumbor ? (this.loaded ? this.highRes : this.lowRes) + 'http://api.comics:5000' : this.api) + this.file.cover;
+        return (this.useThumbor ? (this.loaded ? this.highRes : this.lowRes) + Config.THUMBOR_API_GATEWAY_URL : this.api) + this.file.cover;
       }
     },
     props: {

@@ -138,7 +138,7 @@
         this.$forceUpdate()
       },
       imageSource: function(url) {
-        return (this.useThumbor ? this.highRes + 'http://api.comics:5000' : this.api) + (this.total > 0 ? url : '');
+        return (this.useThumbor ? this.highRes + Config.THUMBOR_API_GATEWAY_URL : this.api) + (this.total > 0 ? url : '');
       },
       displayClass: function(item) {
         return parseInt(this.index) === parseInt(item) ? 'displayed' : 'hidden'
