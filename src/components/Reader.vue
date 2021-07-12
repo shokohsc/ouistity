@@ -59,7 +59,7 @@
 <script>
   import axios from 'axios';
   import graphql from '../api';
-  import Config from "../config.json";
+  import getEnv from '../utils/env';
 
   export default {
     computed: {
@@ -70,10 +70,10 @@
         return this.pages.length;
       },
       api: function() {
-        return window.location.protocol + '//' + Config.API_GATEWAY_HOST;
+        return window.location.protocol + '//' + getEnv('API_GATEWAY_HOST');
       },
       thumbor: function() {
-        return window.location.protocol + '//' + Config.THUMBOR_HOST;
+        return window.location.protocol + '//' + getEnv('THUMBOR_HOST');
       },
       height: function() {
         return window.innerHeight;
@@ -138,7 +138,7 @@
         this.$forceUpdate()
       },
       imageSource: function(url) {
-        return (this.useThumbor ? this.highRes + Config.THUMBOR_API_GATEWAY_URL : this.api) + (this.total > 0 ? url : '');
+        return (this.useThumbor ? this.highRes + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + (this.total > 0 ? url : '');
       },
       displayClass: function(item) {
         return parseInt(this.index) === parseInt(item) ? 'displayed' : 'hidden'

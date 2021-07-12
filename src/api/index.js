@@ -1,9 +1,9 @@
 import axios from 'axios';
-import Config from "../config.json";
+import getEnv from '../utils/env';
 
 const graphqlConfig = {
   protocol: window.location.protocol,
-  host: Config.GRAPHQL_GATEWAY_HOST
+  host: getEnv('GRAPHQL_GATEWAY_HOST')
 };
 
 const graphql = axios.create({

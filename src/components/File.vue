@@ -19,24 +19,24 @@
 
 <script>
   import defaultCover from '../assets/marvel_default.jpg'
-  import Config from "../config.json";
+  import getEnv from '../utils/env';
 
   export default {
     computed: {
       lowRes: function() {
-        return window.location.protocol + '//' + Config.THUMBOR_HOST + '/unsafe/216x324/smart/filters:quality(40)/';
+        return window.location.protocol + '//' + getEnv('THUMBOR_HOST') + '/unsafe/216x324/smart/filters:quality(40)/';
       },
       highRes: function() {
-        return window.location.protocol + '//' + Config.THUMBOR_HOST + '/unsafe/216x324/smart/filters:quality(100)/';
+        return window.location.protocol + '//' + getEnv('THUMBOR_HOST') + '/unsafe/216x324/smart/filters:quality(100)/';
       },
       api: function() {
-        return window.location.protocol + '//' + Config.API_GATEWAY_HOST;
+        return window.location.protocol + '//' + getEnv('API_GATEWAY_HOST');
       },
       image: function() {
         if (!this.file.cover) {
           return defaultCover;
         }
-        return (this.useThumbor ? (this.loaded ? this.highRes : this.lowRes) + Config.THUMBOR_API_GATEWAY_URL : this.api) + this.file.cover;
+        return (this.useThumbor ? (this.loaded ? this.highRes : this.lowRes) + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + this.file.cover;
       }
     },
     props: {
