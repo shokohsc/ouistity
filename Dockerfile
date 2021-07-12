@@ -8,7 +8,7 @@ COPY . .
 RUN npm run build
 
 # production stage
-FROM nginx:stable-alpine
+FROM nginx:stable
 COPY ./start-nginx.sh /usr/bin/start-nginx.sh
 RUN chmod +x /usr/bin/start-nginx.sh
 WORKDIR /usr/share/nginx/html
