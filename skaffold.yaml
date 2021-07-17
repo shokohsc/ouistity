@@ -25,6 +25,12 @@ profiles:
     build:
       artifacts:
       - image: shokohsc/ouistity
+        sync:
+          manual:
+          - src: 'src/**/*.js'
+            dest: .
+          - src: 'src/**/*.vue'
+            dest: .
   - name: shokohsc
     build:
       cluster:
@@ -37,6 +43,12 @@ profiles:
       - image: shokohsc/ouistity
         kaniko:
           dockerfile: Dockerfile.dev
+        sync:
+          manual:
+          - src: 'src/**/*.js'
+            dest: .
+          - src: 'src/**/*.vue'
+            dest: .
     deploy:
       kustomize:
         paths:

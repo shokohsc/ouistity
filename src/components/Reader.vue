@@ -112,7 +112,6 @@
     created() {
       window.scrollTo(0, 0);
       window.addEventListener('keyup', this.keyUp);
-      window.addEventListener('resize', this.update);
       this.$watch(
         () => this.$route.query.page,
         async () => {
@@ -126,9 +125,8 @@
         { immediate: true }
       )
     },
-    destroyed: function() {
+    beforeUnmount: function() {
       window.removeEventListener('keyup', this.keyUp);
-      window.removeEventListener('resize', this.update);
       if (document.fullscreenElement && document.exitFullscreen) {
         document.exitFullscreen();
       }
@@ -158,7 +156,7 @@
         await this.turnPage(parseInt(this.page));
       },
       close: function() {
-        this.loading = true;
+        window.removeEventListener('keyup', this.keyUp);
         if (document.fullscreenElement && document.exitFullscreen) {
           document.exitFullscreen();
         }
@@ -211,14 +209,8 @@
           case 37:
             this.previousPage();
             break;
-          case 38:
-            this.fullscreen();
-            break;
           case 39:
             this.nextPage();
-            break;
-          case 40:
-            this.close();
             break;
           case 27:
             this.close();

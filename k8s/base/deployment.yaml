@@ -19,7 +19,7 @@ spec:
           image: shokohsc/ouistity
           env:
             - name: ENV
-              value: production
+              value: development
             - name: API_GATEWAY_HOST
               value: api.cluster.local
             - name: API_GATEWAY_PORT

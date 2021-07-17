@@ -4,8 +4,9 @@ WORKDIR /app
 COPY package*.json ./
 RUN apk add --no-cache bash gettext ca-certificates && \
     npm install
-COPY ./start-nginx.sh /usr/bin/start-nginx.sh
 COPY . .
 
+COPY ./start-nginx.sh /usr/bin/start-nginx.sh
+RUN chmod +x /usr/bin/start-nginx.sh
 ENTRYPOINT [ "start-nginx.sh" ]
 CMD ["dev"]

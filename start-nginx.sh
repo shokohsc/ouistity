@@ -11,10 +11,11 @@ JSON_STRING='window.configs = { \
   "THUMBOR_PORT":"'"${THUMBOR_PORT}"'", \
   "THUMBOR_API_GATEWAY_URL":"'"${THUMBOR_API_GATEWAY_URL}"'" \
 }'
-sed -i "s@// CONFIGURATIONS_PLACEHOLDER@${JSON_STRING}@" /usr/share/nginx/html/index.html
 
 if [[ $ENV == 'production' ]]; then
+  sed -i "s@// CONFIGURATIONS_PLACEHOLDER@${JSON_STRING}@" /usr/share/nginx/html/index.html
   nginx -g 'daemon off;'
 else
+  sed -i "s@// CONFIGURATIONS_PLACEHOLDER@${JSON_STRING}@" /app/index.html
   npm run $@
 fi

@@ -9,8 +9,8 @@ spec:
       containers:
         - name: ouistity
           image: shokohsc/ouistity
-          args:
-            - dev-serve
+          # args:
+          #   - dev-serve
           env:
             - name: ENV
               value: development
