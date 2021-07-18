@@ -36,7 +36,7 @@
     },
     computed: {
       entries: function() {
-        return this.files.sort(function (fileA, fileB) {
+        return this.files[this.filesKey].sort(function (fileA, fileB) {
           if (fileA.name.toLowerCase() > fileB.name.toLowerCase()) {
             return 1;
           }
@@ -45,6 +45,9 @@
           }
           return 0;
         });
+      },
+      filesKey: function() {
+        return this.q + '#' + this.directory;
       },
       parentDirectory: function() {
         return {
@@ -83,16 +86,16 @@
           this.directory = this.$route.query.hasOwnProperty('directory') ? this.$route.query.directory : ''
           this.page = this.$route.query.hasOwnProperty('page') ? this.$route.query.page : 1
           this.pageSize = this.$route.query.hasOwnProperty('pageSize') ? this.$route.query.pageSize : 10
-          this.files = []
+          this.files[this.filesKey] = []
           await this.fetchData(this.q, this.directory, this.page, this.pageSize)
           if (this.directory !== '' && this.directory !== '/') {
-            this.files.push(this.parentDirectory);
+            this.files[this.filesKey].push(this.parentDirectory);
           }
         },
         { immediate: true }
       )
     },
-    destroyed () {
+    beforeUnmount() {
       window.removeEventListener('scroll', this.handleScroll);
       window.removeEventListener('keyup', this.keyUp);
     },
@@ -103,19 +106,19 @@
         const argument = q.length > 2 ? q : directory
         await graphql[`${q.length > 2 ? 'search' : 'browse'}`](argument, page, pageSize)
           .then((response) => {
-              const result = response.data.data[`${q.length > 2 ? 'search' : 'browse'}`];
-              result.rows.forEach(row => {
-                row.route = row.type === 'folder' ? { path: '/', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };
-                row.name  = row.type === 'file' ? row.name.replace(/(\(.+\))/gm, '').replace(/\.(cbr|cbz)$/, '') : row.name.match(/([^\/]*)\/*$/)[0];
-                this.files.push(row);
-              });
-              this.totalPages = result.totalPages;
-              this.lastFetchedPage = page;
-              this.loading = false
+            const result = response.data.data[`${q.length > 2 ? 'search' : 'browse'}`];
+            result.rows.forEach(row => {
+              row.route = row.type === 'folder' ? { path: '/', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };
+              row.name  = row.type === 'file' ? row.name.replace(/(\(.+\))/gm, '').replace(/\.(cbr|cbz)$/, '') : row.name.match(/([^\/]*)\/*$/)[0];
+              this.files[q + '#' + directory].push(row);
+            });
+            this.totalPages = result.totalPages;
+            this.lastFetchedPage = page;
+            this.loading = false
           })
           .catch((error) => {
-              console.log(error);
-              this.loading = false
+            console.log(error);
+            this.loading = false
           });
       },
       keyUp: function(e) {
@@ -127,14 +130,14 @@
       },
       async clear(e) {
         if (this.q !== '') {
-          this.files = []
+          this.files[this.filesKey] = []
           this.q = '';
           await this.fetchData(this.q, this.directory, this.page, this.pageSize)
         }
       },
       async validate() {
         if (this.q.length > 2) {
-          this.files = []
+          this.files[this.filesKey] = []
           this.directory = ''
           await this.fetchData(this.q, this.directory, this.page, this.pageSize)
         }

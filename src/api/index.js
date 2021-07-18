@@ -7,7 +7,10 @@ const graphqlConfig = {
 };
 
 const graphql = axios.create({
-  baseURL: graphqlConfig.protocol + '//' + graphqlConfig.host + '/'
+  baseURL: graphqlConfig.protocol + '//' + graphqlConfig.host + '/',
+  headers: {
+    'Cache-Control': 'max-age=600'
+  }
   // timeout: 500
 });
 

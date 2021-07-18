@@ -23,12 +23,12 @@
   </div>
   <div class="modal">
     <div class="modal-background" @click="hide"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
+    <div class="modal-card has-background-dark">
+      <header class="modal-card-head has-background-dark">
         <p class="modal-card-title">Menu</p>
         <button class="delete" aria-label="close" @click="hide"></button>
       </header>
-      <section class="modal-card-body">
+      <section class="modal-card-body has-background-dark">
         <div class="columns is-justify-content-center">
           <div class="column is-narrow">
             <div class="select">
@@ -39,7 +39,7 @@
           </div>
         </div>
       </section>
-      <footer class="modal-card-foot is-justify-content-center">
+      <footer class="modal-card-foot is-justify-content-center has-background-dark">
         <div class="columns">
           <div class="column">
             <button class="button is-fullwidth is-primary" @click="skip">Go</button>
@@ -82,7 +82,7 @@
         return window.screen.availWidth;
       },
       metaUrl: function() {
-        return this.thumbor + '/unsafe/meta/smart/filters:quality(80)/' + 'http://api.comics:5000' + this.pages[this.index].image;
+        return this.thumbor + '/unsafe/meta/smart/filters:quality(80)/' + getEnv('THUMBOR_API_GATEWAY_URL') + this.pages[this.index].image;
       },
       divHeight: function() {
         if (this.useThumbor) {
