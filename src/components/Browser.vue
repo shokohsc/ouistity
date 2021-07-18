@@ -36,7 +36,7 @@
     },
     computed: {
       entries: function() {
-        return this.files[this.filesKey].sort(function (fileA, fileB) {
+        return this.files[this.filesKey] ? this.files[this.filesKey].sort(function (fileA, fileB) {
           if (fileA.name.toLowerCase() > fileB.name.toLowerCase()) {
             return 1;
           }
@@ -44,10 +44,10 @@
             return -1;
           }
           return 0;
-        });
+        }) : [];
       },
       filesKey: function() {
-        return this.q + '#' + this.directory;
+        return '#' + this.directory;
       },
       parentDirectory: function() {
         return {
@@ -110,7 +110,7 @@
             result.rows.forEach(row => {
               row.route = row.type === 'folder' ? { path: '/', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };
               row.name  = row.type === 'file' ? row.name.replace(/(\(.+\))/gm, '').replace(/\.(cbr|cbz)$/, '') : row.name.match(/([^\/]*)\/*$/)[0];
-              this.files[q + '#' + directory].push(row);
+              this.files['#' + directory].push(row);
             });
             this.totalPages = result.totalPages;
             this.lastFetchedPage = page;
