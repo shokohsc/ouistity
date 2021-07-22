@@ -82,6 +82,7 @@
       this.$watch(
         () => this.$route.query.directory,
         async () => {
+          // console.log(window.localStorage);
           this.q = ''
           this.directory = this.$route.query.hasOwnProperty('directory') ? this.$route.query.directory : ''
           this.page = this.$route.query.hasOwnProperty('page') ? this.$route.query.page : 1

@@ -5,7 +5,7 @@
     v-touch:swipe.right="previousPage"
     v-if="metadataLoaded"
     class="page is-justify-content-center is-align-items-center"
-    :style="{ 'height': divHeight + 'px' }"
+    :style="divStyle"
   >
     <div @click="previousPage" class="previous" />
     <div @click="fullscreen" class="fullscreen" />
@@ -17,10 +17,11 @@
       :data-src="imageSource(source.image)"
       :id="`page-${i}`"
       :class="displayClass(i)"
-      :style="{ 'height': imageHeight + 'px' }"
+      :style="imageStyle"
     />
     <p class="pages glow">{{ currentPage }} / {{ total }}</p>
   </div>
+
   <div class="modal">
     <div class="modal-background" @click="hide"></div>
     <div class="modal-card has-background-dark">
@@ -29,12 +30,16 @@
         <button class="delete" aria-label="close" @click="hide"></button>
       </header>
       <section class="modal-card-body has-background-dark">
-        <div class="columns is-justify-content-center">
-          <div class="column is-narrow">
-            <div class="select">
-              <select v-model="page">
-                <option :value="i" v-for="(p, i) in pages" :key="i">{{ i + 1 }}/{{ total }}</option>
-              </select>
+        <div class="columns">
+          <div class="column">
+            <div class="field has-addons has-addons-centered">
+              <div class="control">
+                <div class="select">
+                  <select v-model="page">
+                    <option :value="i" v-for="(p, i) in pages" :key="i">{{ i + 1 }}/{{ total }}</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -75,25 +80,8 @@
       thumbor: function() {
         return window.location.protocol + '//' + getEnv('THUMBOR_HOST');
       },
-      height: function() {
-        return window.innerHeight;
-      },
-      width: function() {
-        return window.screen.availWidth;
-      },
       metaUrl: function() {
         return this.thumbor + '/unsafe/meta/smart/filters:quality(80)/' + getEnv('THUMBOR_API_GATEWAY_URL') + this.pages[this.index].image;
-      },
-      divHeight: function() {
-        if (this.useThumbor) {
-          return Math.floor(this.imageHeight > this.height ? this.imageHeight : this.height);
-        }
-      },
-      imageHeight: function() {
-        if (this.useThumbor && this.pages[this.index].metadata) {
-          return Math.floor((this.pages[this.index].metadata.target.height * this.width) / this.pages[this.index].metadata.target.width);
-        }
-        return 0;
       },
       highRes: function() {
         return this.thumbor + '/unsafe/smart/filters:quality(100)/';
@@ -107,11 +95,14 @@
         index: 0,
         page: 0,
         pages: [],
+        divStyle: { height: `${this.divHeight()}px` },
+        imageStyle: { height: `${this.imageHeight()}px` }
       }
     },
     created() {
       window.scrollTo(0, 0);
       window.addEventListener('keyup', this.keyUp);
+      window.addEventListener('resize', this.resize);
       this.$watch(
         () => this.$route.query.page,
         async () => {
@@ -120,20 +111,34 @@
           this.index = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
           this.page = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
           window.localStorage.setItem(this.$route.params.urn, this.index)
-          this.turnPage(this.index)
+          await this.turnPage(this.index)
         },
         { immediate: true }
       )
     },
     beforeUnmount: function() {
       window.removeEventListener('keyup', this.keyUp);
+      window.removeEventListener('resize', this.resize);
       if (document.fullscreenElement && document.exitFullscreen) {
         document.exitFullscreen();
       }
     },
     methods: {
-      update: function(e) {
-        this.$forceUpdate()
+      resize: function() {
+        this.divStyle = { height: `${this.divHeight()}px` }
+        this.imageStyle = { height: `${this.imageHeight()}px` }
+      },
+      height: function() {
+        return window.innerHeight;
+      },
+      width: function() {
+        return window.innerWidth;
+      },
+      divHeight: function() {
+        return this.imageHeight() > this.height() ? this.imageHeight() : this.height();
+      },
+      imageHeight: function() {
+        return this.useThumbor && this.pages[this.index].metadata ? Math.floor(this.pages[this.index].metadata.target.height * this.width() / this.pages[this.index].metadata.target.width) : this.height();
       },
       imageSource: function(url) {
         return (this.useThumbor ? this.highRes + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + (this.total > 0 ? url : '');
@@ -183,6 +188,8 @@
           this.index = page
           this.page = page
           await this.metadata()
+          this.divStyle = { height: `${this.divHeight()}px` }
+          this.imageStyle = { height: `${this.imageHeight()}px` }
           window.localStorage.setItem(this.$route.params.urn, this.index)
           document.body.scrollTop = 0; // For Safari
           document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
