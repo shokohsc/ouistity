@@ -44,7 +44,7 @@ profiles:
       kaniko:
         dockerfile: Dockerfile.dev
         cache:
-          repo: "shokohsc/ouistity"
+          repo: shokohsc/ouistity
     cluster:
       dockerConfig:
         secretName: kaniko-secret
@@ -61,7 +61,7 @@ profiles:
       kaniko:
         dockerfile: Dockerfile
         cache:
-          repo: "shokohsc/ouistity"
+          repo: shokohsc/ouistity
     cluster:
       dockerConfig:
         secretName: kaniko-secret
