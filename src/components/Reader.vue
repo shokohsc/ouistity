@@ -18,6 +18,7 @@
       :id="`page-${i}`"
       :class="displayClass(i)"
       :style="imageStyle"
+      @onerror="imgLoadError()"
     />
     <p class="pages glow">{{ currentPage }} / {{ total }}</p>
   </div>
@@ -91,7 +92,7 @@
       return {
         loading: true,
         metadataLoaded: false,
-        useThumbor: true,
+        useThumbor: getEnv('USE_THUMBOR'),
         index: 0,
         page: 0,
         pages: [],
@@ -224,6 +225,10 @@
             break;
         }
       },
+      imgLoadError: function(e) {
+        console.log(e);
+        throw e;
+      },
       async fetchData() {
         this.loading = true
 
@@ -237,6 +242,7 @@
           })
           .catch((error) => {
             console.log(error);
+            throw error;
             this.loading = false
           });
       },
@@ -253,6 +259,7 @@
           })
           .catch(error => {
             console.log(error);
+            throw error;
           });
       },
     }

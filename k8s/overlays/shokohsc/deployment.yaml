@@ -9,8 +9,8 @@ spec:
       containers:
         - name: ouistity
           image: shokohsc/ouistity
-          args:
-            - dev-serve
+          # args:
+          #   - dev-serve
           env:
             - name: ENV
               value: development
@@ -19,15 +19,19 @@ spec:
             - name: GRAPHQL_GATEWAY_HOST
               value: apollo.comics.shokohsc.home
             - name: USE_THUMBOR
-              value: "true"
+              value: "false"
             - name: THUMBOR_HOST
               value: thumbor.shokohsc.home
             - name: THUMBOR_API_GATEWAY_URL
               value: "http://api.comics:5000"
-          ports:
-            - name: serve
-              containerPort: 5000
-              protocol: TCP
+            - name: USE_SENTRY
+              value: "true"
+            - name: SENTRY_DSN
+              value: https://2f15ffed2e254ced911e78de9312afe0\@glitchtip.shokohsc.home/1
+          # ports:
+          #   - name: serve
+          #     containerPort: 5000
+          #     protocol: TCP
             # - name: dev
             #   containerPort: 3000
             #   protocol: TCP

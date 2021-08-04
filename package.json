@@ -12,6 +12,10 @@
   "dependencies": {
     "@fontsource/source-sans-pro": "^4.4.5",
     "@fortawesome/fontawesome-free": "^5.15.3",
+    "@sentry/browser": "^6.10.0",
+    "@sentry/integrations": "^6.10.0",
+    "@sentry/tracing": "^6.10.0",
+    "@sentry/vue": "^6.10.0",
     "axios": "^0.21.1",
     "bulma": "^0.9.3",
     "es6-promise": "^4.2.8",

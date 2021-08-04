@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import Browser from './components/Browser.vue';
+import Search from './components/Search.vue';
 import Reader from './components/Reader.vue';
 
 const routes = [
@@ -8,6 +9,12 @@ const routes = [
     name: 'Browser',
     path: '/',
     component: Browser,
+    props: (route) => ({ query: route.query })
+  },
+  {
+    name: 'Search',
+    path: '/search',
+    component: Search,
     props: (route) => ({ query: route.query })
   },
   {

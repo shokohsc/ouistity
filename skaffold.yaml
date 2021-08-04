@@ -1,66 +1,67 @@
-apiVersion: skaffold/v2beta15
+apiVersion: skaffold/v2beta20
 kind: Config
 metadata:
   name: ouistity
 build:
   artifacts:
   - image: shokohsc/ouistity
-    docker:
-      dockerfile: Dockerfile.dev
     context: .
     sync:
       manual:
-      - src: 'src/**/*.js'
+      - src: src/**/*.js
         dest: .
-      - src: 'src/**/*.vue'
+      - src: src/**/*.vue
         dest: .
+    docker:
+      dockerfile: Dockerfile.dev
 deploy:
   kustomize:
     paths:
-      - k8s/base
+    - k8s/base
 profiles:
-  - name: dev
-    activation:
-      - command: dev
-    build:
-      artifacts:
-      - image: shokohsc/ouistity
-        sync:
-          manual:
-          - src: 'src/**/*.js'
-            dest: .
-          - src: 'src/**/*.vue'
-            dest: .
-  - name: shokohsc
-    build:
-      cluster:
-        namespace: kaniko
-        pullSecretName: kaniko-secret
-        dockerConfig:
-          # path: ~/.docker/config.json
-          secretName: kaniko-secret
-      artifacts:
-      - image: shokohsc/ouistity
-        kaniko:
-          dockerfile: Dockerfile.dev
-        sync:
-          manual:
-          - src: 'src/**/*.js'
-            dest: .
-          - src: 'src/**/*.vue'
-            dest: .
-    deploy:
-      kustomize:
-        paths:
-          - k8s/overlays/shokohsc
-  - name: prod
-    build:
-      cluster:
-        namespace: kaniko
-        pullSecretName: kaniko-secret
-        dockerConfig:
-          secretName: kaniko-secret
-      artifacts:
-      - image: shokohsc/ouistity
-        kaniko:
-          dockerfile: Dockerfile
+- name: dev
+  activation:
+  - command: dev
+  build:
+    artifacts:
+    - image: shokohsc/ouistity
+      sync:
+        manual:
+        - src: src/**/*.js
+          dest: .
+        - src: src/**/*.vue
+          dest: .
+- name: shokohsc
+  build:
+    artifacts:
+    - image: shokohsc/ouistity
+      sync:
+        manual:
+        - src: src/**/*.js
+          dest: .
+        - src: src/**/*.vue
+          dest: .
+      kaniko:
+        dockerfile: Dockerfile.dev
+        cache:
+          repo: "shokohsc/ouistity-cache"
+    cluster:
+      dockerConfig:
+        secretName: kaniko-secret
+      namespace: kaniko
+      pullSecretName: kaniko-secret
+  deploy:
+    kustomize:
+      paths:
+      - k8s/overlays/shokohsc
+- name: prod
+  build:
+    artifacts:
+    - image: shokohsc/ouistity
+      kaniko:
+        dockerfile: Dockerfile
+    cluster:
+      dockerConfig:
+        secretName: kaniko-secret
+      namespace: kaniko
+      pullSecretName: kaniko-secret

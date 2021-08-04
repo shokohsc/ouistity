@@ -45,7 +45,7 @@
     data() {
       return {
         loaded: false,
-        useThumbor: true
+        useThumbor: getEnv('USE_THUMBOR')
       }
     },
     methods: {

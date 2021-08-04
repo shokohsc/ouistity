@@ -30,6 +30,8 @@ spec:
               value: "80"
             - name: USE_THUMBOR
               value: "false"
+            - name: USE_SENTRY
+              value: "false"
           ports:
             - name: http
               containerPort: 80

@@ -27,26 +27,13 @@
         }) : [];
       },
       filesKey: function() {
-        return '#' + this.directory;
-      },
-      parentDirectory: function() {
-        return {
-          name: '..',
-          type: 'folder',
-          route: {
-            path: '/',
-            query: this.directory.replace(/([^\/]*)\/*$/, '').length > 0 ? {
-              directory: this.directory.replace(/([^\/]*)\/*$/, '')
-            } : {}
-          },
-          cover: null
-        }
+        return '#' + this.q;
       }
     },
     data() {
       return {
         loading: true,
-        directory: '',
+        q: '',
         page: 1,
         pageSize: 10,
         files: [],
@@ -58,17 +45,14 @@
       window.scrollTo(0, 0);
       window.addEventListener('scroll', this.handleScroll);
       this.$watch(
-        () => this.$route.query.directory,
+        () => this.$route.query.q,
         async () => {
           // console.log(window.localStorage);
-          this.directory = this.$route.query.hasOwnProperty('directory') ? this.$route.query.directory : ''
+          this.q = this.$route.query.hasOwnProperty('q') ? this.$route.query.q : ''
           this.page = this.$route.query.hasOwnProperty('page') ? this.$route.query.page : 1
           this.pageSize = this.$route.query.hasOwnProperty('pageSize') ? this.$route.query.pageSize : 10
           this.files[this.filesKey] = []
-          await this.fetchData(this.directory, this.page, this.pageSize)
-          if (this.directory !== '' && this.directory !== '/') {
-            this.files[this.filesKey].push(this.parentDirectory);
-          }
+          await this.fetchData(this.q, this.page, this.pageSize)
         },
         { immediate: true }
       )
@@ -77,18 +61,18 @@
       window.removeEventListener('scroll', this.handleScroll);
     },
     methods: {
-      async fetchData(directory = '', page = 1, pageSize = 10) {
+      async fetchData(q = '', page = 1, pageSize = 10) {
         this.loading = true
 
-        await graphql.browse(directory, page, pageSize)
+        await graphql.search(q, page, pageSize)
           .then((response) => {
-            const result = response.data.data.browse;
+            const result = response.data.data.search;
             result.rows.forEach(row => {
-              row.route = row.type === 'folder' ? { path: '/', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };
+              row.route = row.type === 'folder' ? { path: '/', query: { q: q + row.name } } : { name: 'Reader', params: { urn: row.urn } };
               row.name  = row.type === 'file' ? row.name.replace(/(\(.+\))/gm, '').replace(/\.(cbr|cbz)$/, '') : row.name.match(/([^\/]*)\/*$/)[0];
-              // if (undefined === this.files['#' + directory])
-              //   this.files['#' + directory] = [];
-              this.files['#' + directory].push(row);
+              // if (undefined === this.files['#' + q])
+              //   this.files['#' + q] = [];
+              this.files['#' + q].push(row);
             });
             this.totalPages = result.totalPages;
             this.lastFetchedPage = page;
@@ -103,7 +87,7 @@
       async handleScroll(e) {
         e.stopPropagation();
         if ((window.scrollY >= (document.body.offsetHeight - window.outerHeight)) && (!this.loading) && (this.lastFetchedPage < this.totalPages)) {
-          await this.fetchData(this.directory, this.lastFetchedPage + 1, this.pageSize)
+          await this.fetchData(this.q, this.lastFetchedPage + 1, this.pageSize)
         }
       }
     },
