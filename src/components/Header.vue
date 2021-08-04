@@ -50,7 +50,7 @@ export default {
     },
     async validate() {
       if (this.q.length > 2) {
-        this.$router.push({ path: '/search', query: { q: this.q }})
+        this.$router.push({ path: '/search', replace: true, query: { q: this.q }})
       }
     },
   }
