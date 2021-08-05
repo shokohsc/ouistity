@@ -18,7 +18,6 @@
       :id="`page-${i}`"
       :class="displayClass(i)"
       :style="imageStyle"
-      @onerror="imgLoadError()"
     />
     <p class="pages glow">{{ currentPage }} / {{ total }}</p>
   </div>
@@ -139,10 +138,10 @@
         return this.imageHeight() > this.height() ? this.imageHeight() : this.height();
       },
       imageHeight: function() {
-        return this.useThumbor && this.pages[this.index].metadata ? Math.floor(this.pages[this.index].metadata.target.height * this.width() / this.pages[this.index].metadata.target.width) : this.height();
+        return this.useThumbor == 'true' && this.pages[this.index].metadata ? Math.floor(this.pages[this.index].metadata.target.height * this.width() / this.pages[this.index].metadata.target.width) : this.height();
       },
       imageSource: function(url) {
-        return (this.useThumbor ? this.highRes + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + (this.total > 0 ? url : '');
+        return (this.useThumbor == 'true' ? this.highRes + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + (this.total > 0 ? url : '');
       },
       displayClass: function(item) {
         return parseInt(this.index) === parseInt(item) ? 'displayed' : 'hidden'
@@ -225,10 +224,6 @@
             break;
         }
       },
-      imgLoadError: function(e) {
-        console.log(e);
-        throw e;
-      },
       async fetchData() {
         this.loading = true
 
@@ -242,7 +237,6 @@
           })
           .catch((error) => {
             console.log(error);
-            throw error;
             this.loading = false
           });
       },
@@ -259,7 +253,6 @@
           })
           .catch(error => {
             console.log(error);
-            throw error;
           });
       },
     }

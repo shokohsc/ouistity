@@ -84,10 +84,8 @@
           .then((response) => {
             const result = response.data.data.browse;
             result.rows.forEach(row => {
-              row.route = row.type === 'folder' ? { path: '/', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };
+              row.route = row.type === 'folder' ? { name: 'Browser', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };
               row.name  = row.type === 'file' ? row.name.replace(/(\(.+\))/gm, '').replace(/\.(cbr|cbz)$/, '') : row.name.match(/([^\/]*)\/*$/)[0];
-              // if (undefined === this.files['#' + directory])
-              //   this.files['#' + directory] = [];
               this.files['#' + directory].push(row);
             });
             this.totalPages = result.totalPages;
@@ -96,7 +94,6 @@
           })
           .catch((error) => {
             console.log(error);
-            throw error;
             this.loading = false
           });
       },

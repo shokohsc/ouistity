@@ -1,10 +1,10 @@
 <template>
   <div class="column is-narrow">
       <div class="box has-background-black">
-        <router-link :to="file.route">
+        <router-link :to="file.route" replace>
           <div class="block">
             <figure class="image">
-              <img @load="enhance" :src="image" alt="{{ file.name }}" loading="lazy" class="cover" />
+              <img @load="enhance" :src="image" alt="{{ file.name }}" loading="lazy" class="cover" width="216" height="324" />
             </figure>
           </div>
           <div class="block has-text-white has-text-centered">
@@ -36,7 +36,7 @@
         if (!this.file.cover) {
           return defaultCover;
         }
-        return (this.useThumbor ? (this.loaded ? this.highRes : this.lowRes) + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + this.file.cover;
+        return (this.useThumbor == 'true' ? (this.loaded ? this.highRes : this.lowRes) + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + this.file.cover;
       }
     },
     props: {
