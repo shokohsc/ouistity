@@ -18,14 +18,14 @@ spec:
               value: api.comics.shokohsc.home
             - name: GRAPHQL_GATEWAY_HOST
               value: apollo.comics.shokohsc.home
-            - name: USE_THUMBOR
-              value: "false"
+            # - name: USE_THUMBOR
+            #   value: "true"
             - name: THUMBOR_HOST
               value: thumbor.shokohsc.home
             - name: THUMBOR_API_GATEWAY_URL
               value: "http://api.comics:5000"
-            - name: USE_SENTRY
-              value: "true"
+            # - name: USE_SENTRY
+            #   value: "true"
             - name: SENTRY_DSN
               value: https://2f15ffed2e254ced911e78de9312afe0\@glitchtip.shokohsc.home/1
           # ports:

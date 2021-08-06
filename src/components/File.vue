@@ -1,7 +1,7 @@
 <template>
   <div class="column is-narrow">
       <div class="box has-background-black">
-        <router-link :to="file.route" replace>
+        <router-link :to="file.route">
           <div class="block">
             <figure class="image">
               <img @load="enhance" :src="image" alt="{{ file.name }}" loading="lazy" class="cover" width="216" height="324" />
