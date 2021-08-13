@@ -1,5 +1,6 @@
 <template>
   <progress v-if="loading" class="progress" max="100">15%</progress>
+  <p class="pages glow">{{ currentPage }} / {{ total }}</p>
   <div
     v-touch:swipe.left="nextPage"
     v-touch:swipe.right="previousPage"
@@ -18,10 +19,8 @@
       :id="`page-${i}`"
       :class="displayClass(i)"
       :style="imageStyle"
-      :alt="`page-${i}`"
       crossorigin="anonymous"
     />
-    <p class="pages glow">{{ currentPage }} / {{ total }}</p>
   </div>
 
   <div class="modal">
@@ -83,7 +82,7 @@
         return window.location.protocol + '//' + getEnv('THUMBOR_HOST');
       },
       metaUrl: function() {
-        return this.thumbor + '/unsafe/meta/smart/filters:quality(80)/' + getEnv('THUMBOR_API_GATEWAY_URL') + this.pages[this.index].image;
+        return this.thumbor + '/unsafe/meta/smart/filters:quality(40)/' + getEnv('THUMBOR_API_GATEWAY_URL') + this.pages[this.index].image;
       },
       highRes: function() {
         return this.thumbor + '/unsafe/smart/filters:quality(100)/';
@@ -205,7 +204,7 @@
       },
       preload: function(page, e = null) {
 
-        // function getMeta(url){   
+        // function getMeta(url){
         //   var img = new Image();
         //   img.addEventListener("load", function(){
         //     alert( this.naturalWidth +' '+ this.naturalHeight );
@@ -367,9 +366,10 @@ img.displayed {
   opacity: 0.1;
   pointer-events: none;
   font-family: monospace;
+  z-index: 10;
 }
 .glow {
-  font-size: 80px;
+  font-size: 8vw;
   color: #fff;
   text-align: center;
 }

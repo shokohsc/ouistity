@@ -18,8 +18,8 @@ spec:
               value: api.comics.shokohsc.home
             - name: GRAPHQL_GATEWAY_HOST
               value: apollo.comics.shokohsc.home
-            # - name: USE_THUMBOR
-            #   value: "true"
+            - name: USE_THUMBOR
+              value: "true"
             - name: THUMBOR_HOST
               value: thumbor.shokohsc.home
             - name: THUMBOR_API_GATEWAY_URL
