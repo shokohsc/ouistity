@@ -12,21 +12,23 @@ import router from './router.js'
 
 const app = createApp(App)
 
-Sentry.init({
-  app,
-  dsn: getEnv('SENTRY_DSN'),
-  integrations: [
-    new Integrations.BrowserTracing({
-      logErrors: true,
-      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-      tracingOrigins: ["localhost", window.location.hostname, /^\//],
-    }),
-  ],
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
+if (getEnv('USE_SENTRY') === 'true') {
+  Sentry.init({
+    app,
+    dsn: getEnv('SENTRY_DSN'),
+    integrations: [
+      new Integrations.BrowserTracing({
+        logErrors: true,
+        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+        tracingOrigins: ["localhost", window.location.hostname, /^\//],
+      }),
+    ],
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+  });
+}
 
 app.use(Vue3TouchEvents);
 app.use(router)

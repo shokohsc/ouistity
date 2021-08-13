@@ -36,7 +36,7 @@
         if (!this.file.cover) {
           return defaultCover;
         }
-        return (this.useThumbor == 'true' ? (this.loaded ? this.highRes : this.lowRes) + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + this.file.cover;
+        return (this.useThumbor === 'true' ? (this.loaded ? this.highRes : this.lowRes) + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + this.file.cover;
       }
     },
     props: {

@@ -18,6 +18,8 @@
       :id="`page-${i}`"
       :class="displayClass(i)"
       :style="imageStyle"
+      :alt="`page-${i}`"
+      crossorigin="anonymous"
     />
     <p class="pages glow">{{ currentPage }} / {{ total }}</p>
   </div>
@@ -138,10 +140,10 @@
         return this.imageHeight() > this.height() ? this.imageHeight() : this.height();
       },
       imageHeight: function() {
-        return this.useThumbor == 'true' && this.pages[this.index].metadata ? Math.floor(this.pages[this.index].metadata.target.height * this.width() / this.pages[this.index].metadata.target.width) : this.height();
+        return this.useThumbor === 'true' && this.pages[this.index].metadata ? Math.floor(this.pages[this.index].metadata.target.height * this.width() / this.pages[this.index].metadata.target.width) : this.height();
       },
       imageSource: function(url) {
-        return (this.useThumbor == 'true' ? this.highRes + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + (this.total > 0 ? url : '');
+        return (this.useThumbor === 'true' ? this.highRes + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + (this.total > 0 ? url : '');
       },
       displayClass: function(item) {
         return parseInt(this.index) === parseInt(item) ? 'displayed' : 'hidden'
@@ -202,6 +204,15 @@
         }
       },
       preload: function(page, e = null) {
+
+        // function getMeta(url){   
+        //   var img = new Image();
+        //   img.addEventListener("load", function(){
+        //     alert( this.naturalWidth +' '+ this.naturalHeight );
+        //   });
+        //   img.src = url;
+        // }
+
         page = parseInt(page) + 1
         if (this.pages[page] && page < (parseInt(this.index) + 3)) {
           const el = document.getElementById(`page-${page}`)
@@ -361,16 +372,5 @@ img.displayed {
   font-size: 80px;
   color: #fff;
   text-align: center;
-  -webkit-animation: glow 1s ease-in-out infinite alternate;
-  -moz-animation: glow 1s ease-in-out infinite alternate;
-  animation: glow 1s ease-in-out infinite alternate;
-}
-@-webkit-keyframes glow {
-  from {
-    text-shadow: 0 0 10px #000, 0 0 20px #000, 0 0 30px #0032e6, 0 0 40px #0032e6, 0 0 50px #0032e6, 0 0 60px #0032e6, 0 0 70px #0032e6;
-  }
-  to {
-    text-shadow: 0 0 20px #000, 0 0 30px #4d62ff, 0 0 40px #4d62ff, 0 0 50px #4d62ff, 0 0 60px #4d62ff, 0 0 70px #4d62ff, 0 0 80px #4d62ff;
-  }
 }
 </style>
