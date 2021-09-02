@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2beta20
+apiVersion: skaffold/v2beta22
 kind: Config
 metadata:
   name: ouistity
@@ -42,9 +42,9 @@ profiles:
         - src: src/**/*.vue
           dest: .
       kaniko:
-        dockerfile: Dockerfile.dev
         cache:
           repo: shokohsc/ouistity
+        dockerfile: Dockerfile.dev
     cluster:
       dockerConfig:
         secretName: kaniko-secret
@@ -59,9 +59,9 @@ profiles:
     artifacts:
     - image: shokohsc/ouistity
       kaniko:
-        dockerfile: Dockerfile
         cache:
           repo: shokohsc/ouistity
+        dockerfile: Dockerfile
     cluster:
       dockerConfig:
         secretName: kaniko-secret
