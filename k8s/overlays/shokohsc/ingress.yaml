@@ -9,7 +9,7 @@ metadata:
     flame.pawelmalak/name: ouistity
     flame.pawelmalak/url: dev.comics.shokohsc.home
     flame.pawelmalak/type: app
-    flame.pawelmalak/icon: thought-bubble
+    flame.pawelmalak/icon: wrench
 spec:
   rules:
   - host: dev.comics.shokohsc.home

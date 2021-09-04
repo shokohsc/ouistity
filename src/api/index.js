@@ -24,7 +24,7 @@ export default {
                 page: ${page}
                 pageSize: ${pageSize}
               ){
-                rows { urn name type cover }
+                rows { urn name type cover info { series number summary writer coverArtist penciller } }
                 total
                 totalPages
                 page
@@ -56,7 +56,7 @@ export default {
                 page: ${page}
                 pageSize: ${pageSize}
               ){
-                rows { urn name type cover }
+                rows { urn name type cover info { series number summary } }
                 total
                 totalPages
                 page

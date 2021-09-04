@@ -1,6 +1,7 @@
 import "../node_modules/bulma/css/bulma.css";
 import "@fontsource/source-sans-pro";
 import "@fortawesome/fontawesome-free/css/all.css";
+
 import Vue3TouchEvents from "vue3-touch-events";
 import * as Sentry from "@sentry/vue";
 import { Integrations } from "@sentry/tracing";
