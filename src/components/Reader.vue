@@ -15,6 +15,7 @@
     <div @click="nextPage" class="next" />
     <img v-for="(source, i) in pages" :key="i"
       @load="preload(i, $event)"
+      @error="reload(i, $event)"
       :data-src="imageSource(source.image)"
       :id="`page-${i}`"
       :class="displayClass(i)"
@@ -202,16 +203,17 @@
           this.preload(page)
         }
       },
+      reload: function(page, e = null) {
+        page = parseInt(page)
+        setTimeout(() => {
+          const el = document.getElementById(`page-${page}`)
+          if (el && el.hasAttribute('src')) {
+            el.removeAttribute('src')
+          }
+          this.turnPage(page)
+        }, 1000);
+      },
       preload: function(page, e = null) {
-
-        // function getMeta(url){
-        //   var img = new Image();
-        //   img.addEventListener("load", function(){
-        //     alert( this.naturalWidth +' '+ this.naturalHeight );
-        //   });
-        //   img.src = url;
-        // }
-
         page = parseInt(page) + 1
         if (this.pages[page] && page < (parseInt(this.index) + 3)) {
           const el = document.getElementById(`page-${page}`)
@@ -237,33 +239,30 @@
       async fetchData() {
         this.loading = true
 
-        await graphql.read(this.$route.params.urn)
-          .then((response) => {
-            const read = response.data.data.read;
-            read.rows.forEach(row => {
-              this.pages.push(row)
-            });
-            this.loading = false
-          })
-          .catch((error) => {
-            console.log(error);
-            this.loading = false
+        try {
+          const response = await graphql.read(this.$route.params.urn)
+          const read = response.data.data.read;
+          read.rows.forEach(row => {
+            this.pages.push(row)
           });
+          this.loading = false
+        } catch (e) {
+          console.log(e.message);
+          this.loading = false
+        }
       },
       async metadata() {
-        if (this.pages[this.index].metadata)
-          return this.pages[this.index].metadata
-        const self = this;
+        try {
+          if (this.pages[this.index].metadata)
+            return this.pages[this.index].metadata
 
-        return await fetch(this.metaUrl)
-          .then(response => response.json())
-          .then(data => {
-            this.pages[this.index].metadata = data.thumbor
-            self.metadataLoaded = true
-          })
-          .catch(error => {
-            console.log(error);
-          });
+          const response = await fetch(this.metaUrl)
+          const data = await response.json()
+          this.pages[this.index].metadata = data.thumbor
+          this.metadataLoaded = true
+        } catch (e) {
+          console.log(e.message);
+        }
       },
     }
   };

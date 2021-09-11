@@ -80,23 +80,22 @@
       async fetchData(directory = '', page = 1, pageSize = 10) {
         this.loading = true
 
-        await graphql.browse(directory, page, pageSize)
-          .then((response) => {
-            const result = response.data.data.browse;
-            result.rows.forEach(row => {
-              row.route = row.type === 'folder' ? { name: 'Browser', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };
-              row.name  = row.type === 'file' ? row.name.replace(/(\(.+\))/gm, '').replace(/\.(cbr|cbz)$/, '') : row.name.match(/([^\/]*)\/*$/)[0];
-              row.info = row.type === 'file' ? row.info : undefined;
-              this.files['#' + directory].push(row);
-            });
-            this.totalPages = result.totalPages;
-            this.lastFetchedPage = page;
-            this.loading = false
-          })
-          .catch((error) => {
-            console.log(error);
-            this.loading = false
+        try {
+          const response = await graphql.browse(directory, page, pageSize)
+          const result = response.data.data.browse;
+          result.rows.forEach(row => {
+            row.route = row.type === 'folder' ? { name: 'Browser', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };
+            row.name  = row.type === 'file' ? row.name.replace(/(\(.+\))/gm, '').replace(/\.(cbr|cbz)$/, '') : row.name.match(/([^\/]*)\/*$/)[0];
+            row.info = row.type === 'file' ? row.info : undefined;
+            this.files['#' + directory].push(row);
           });
+          this.totalPages = result.totalPages;
+          this.lastFetchedPage = page;
+          this.loading = false
+        } catch (e) {
+          console.log(e);
+          this.loading = false
+        }
       },
       async handleScroll(e) {
         e.stopPropagation();
