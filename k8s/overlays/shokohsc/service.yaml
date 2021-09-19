@@ -9,11 +9,11 @@
 #       targetPort: serve
 #       protocol: TCP
 #       name: serve
-#     # - port: 3000
-#     #   targetPort: dev
-#     #   protocol: TCP
-#     #   name: dev
-#     # - port: 3002
-#     #   targetPort: browser-sync
-#     #   protocol: TCP
-#     #   name: browser-sync
+#     - port: 3000
+#       targetPort: dev
+#       protocol: TCP
+#       name: dev
+#     - port: 3002
+#       targetPort: browser-sync
+#       protocol: TCP
+#       name: browser-sync

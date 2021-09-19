@@ -22,16 +22,6 @@ spec:
             name: ouistity
             port:
               number: 80
-  # - host: preview.comics.shokohsc.home
-  #   http:
-  #     paths:
-  #     - path: /
-  #       pathType: Prefix
-  #       backend:
-  #         service:
-  #           name: ouistity
-  #           port:
-  #             number: 5000
   # - host: dev.comics.shokohsc.home
   #   http:
   #     paths:
@@ -42,6 +32,16 @@ spec:
   #           name: ouistity
   #           port:
   #             number: 3000
+  # - host: preview.comics.shokohsc.home
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: ouistity
+  #           port:
+  #             number: 5000
   # - host: browsersync.comics.shokohsc.home
   #   http:
   #     paths:
@@ -56,6 +56,5 @@ spec:
   - hosts:
     - dev.comics.shokohsc.home
     # - preview.comics.shokohsc.home
-    # - dev.comics.shokohsc.home
     # - browsersync.comics.shokohsc.home
     secretName: ouistity-cert

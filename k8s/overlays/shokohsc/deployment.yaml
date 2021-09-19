@@ -10,7 +10,7 @@ spec:
         - name: ouistity
           image: shokohsc/ouistity
           # args:
-          #   - dev-serve
+          #   - dev-serve-sync
           env:
             - name: ENV
               value: development
@@ -28,16 +28,16 @@ spec:
             #   value: "true"
             - name: SENTRY_DSN
               value: https://2f15ffed2e254ced911e78de9312afe0\@glitchtip.shokohsc.home/1
-          # ports:
-          #   - name: serve
-          #     containerPort: 5000
-          #     protocol: TCP
-            # - name: dev
-            #   containerPort: 3000
-            #   protocol: TCP
-            # - name: browser-sync
-            #   containerPort: 3002
-            #   protocol: TCP
+      #     ports:
+      #       - name: serve
+      #         containerPort: 5000
+      #         protocol: TCP
+      #       - name: dev
+      #         containerPort: 3000
+      #         protocol: TCP
+      #       - name: browser-sync
+      #         containerPort: 3002
+      #         protocol: TCP
       #     lifecycle:
       #       postStart:
       #         exec:
@@ -51,6 +51,7 @@ spec:
       # volumes:
       #   - name: tls
       #     csi:
+      #       readOnly: true
       #       driver: csi.cert-manager.io
       #       volumeAttributes:
       #             csi.cert-manager.io/issuer-name: ca-cluster-issuer
