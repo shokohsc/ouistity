@@ -209,9 +209,10 @@
           const el = document.getElementById(`page-${page}`)
           if (el && el.hasAttribute('src')) {
             el.removeAttribute('src')
+            const src = el.getAttribute('data-src')
+            el.setAttribute('src', src)
           }
-          this.turnPage(page)
-        }, 1000);
+        }, 3000);
       },
       preload: function(page, e = null) {
         page = parseInt(page) + 1
