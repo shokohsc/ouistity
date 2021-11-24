@@ -19,11 +19,11 @@ spec:
             - name: GRAPHQL_GATEWAY_HOST
               value: apollo.comics.shokohsc.home
             - name: USE_THUMBOR
-              value: "true"
+              value: "false"
             - name: THUMBOR_HOST
               value: thumbor.shokohsc.home
-            - name: THUMBOR_API_GATEWAY_URL
-              value: "http://api.comics:5000"
+            - name: INTERNAL_API_GATEWAY_URL
+              value: "http://api.moleculer-ouistity:5000"
             # - name: USE_SENTRY
             #   value: "true"
             - name: SENTRY_DSN

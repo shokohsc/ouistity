@@ -30,6 +30,8 @@ spec:
               value: "80"
             - name: USE_THUMBOR
               value: "false"
+            - name: INTERNAL_API_GATEWAY_URL
+              value: "http://api.moleculer-ouistity.svc.cluster.local:5000"
             - name: USE_SENTRY
               value: "false"
           ports:

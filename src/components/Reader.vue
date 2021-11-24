@@ -83,7 +83,7 @@
         return window.location.protocol + '//' + getEnv('THUMBOR_HOST');
       },
       metaUrl: function() {
-        return this.thumbor + '/unsafe/meta/smart/filters:quality(40)/' + getEnv('THUMBOR_API_GATEWAY_URL') + this.pages[this.index].image;
+        return this.thumbor + '/unsafe/meta/smart/filters:quality(40)/' + getEnv('INTERNAL_API_GATEWAY_URL') + this.pages[this.index].image;
       },
       highRes: function() {
         return this.thumbor + '/unsafe/smart/filters:quality(100)/';
@@ -97,8 +97,8 @@
         index: 0,
         page: 0,
         pages: [],
-        divStyle: { height: `${this.divHeight()}px` },
-        imageStyle: { height: `${this.imageHeight()}px` }
+        divStyle: { 'height': `${this.divHeight()}px` },
+        imageStyle: { 'height': `${this.imageHeight()}px` },
       }
     },
     created() {
@@ -140,10 +140,10 @@
         return this.imageHeight() > this.height() ? this.imageHeight() : this.height();
       },
       imageHeight: function() {
-        return this.useThumbor === 'true' && this.pages[this.index].metadata ? Math.floor(this.pages[this.index].metadata.target.height * this.width() / this.pages[this.index].metadata.target.width) : this.height();
+        return this.metadataLoaded === true ? Math.floor(this.pages[this.index].metadata.target.height * this.width() / this.pages[this.index].metadata.target.width) : this.height();
       },
       imageSource: function(url) {
-        return (this.useThumbor === 'true' ? this.highRes + getEnv('THUMBOR_API_GATEWAY_URL') : this.api) + (this.total > 0 ? url : '');
+        return (this.useThumbor === 'true' ? this.highRes + getEnv('INTERNAL_API_GATEWAY_URL') : this.api) + (this.total > 0 ? url : '');
       },
       displayClass: function(item) {
         return parseInt(this.index) === parseInt(item) ? 'displayed' : 'hidden'
@@ -189,12 +189,11 @@
           self.metadataLoaded = false
           this.index = page
           this.page = page
+          window.scrollTo(0, 0);
           await this.metadata()
           this.divStyle = { height: `${this.divHeight()}px` }
           this.imageStyle = { height: `${this.imageHeight()}px` }
           window.localStorage.setItem(this.$route.params.urn, this.index)
-          document.body.scrollTop = 0; // For Safari
-          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
           const el = document.getElementById(`page-${page}`)
           if (el && !el.hasAttribute('src')) {
             const src = this.imageSource(this.pages[this.index].image)
@@ -252,17 +251,31 @@
           this.loading = false
         }
       },
+      async getRemoteImageSize(src) {
+        return new Promise((resolve, reject) => {
+          let img = new Image()
+          img.onload = () => resolve({ 'target': { 'height': img.height, 'width': img.width } })
+          // img.onerror = reject(src)
+          img.src = src
+        })
+      },
       async metadata() {
         try {
           if (this.pages[this.index].metadata)
             return this.pages[this.index].metadata
 
-          const response = await fetch(this.metaUrl)
-          const data = await response.json()
-          this.pages[this.index].metadata = data.thumbor
+          if ('true' === this.useThumbor) {
+            const response = await fetch(this.metaUrl)
+            const data = await response.json()
+            this.pages[this.index].metadata = data.thumbor
+          } else {
+            const imageUrl = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + this.pages[this.index].image
+            const data = await this.getRemoteImageSize(imageUrl)
+            this.pages[this.index].metadata = data
+          }
           this.metadataLoaded = true
         } catch (e) {
-          console.log(e.message);
+          console.log(e);
         }
       },
     }

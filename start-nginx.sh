@@ -12,7 +12,7 @@ JSON_STRING='window.configs = { \
   "USE_THUMBOR":"'"${USE_THUMBOR}"'", \
   "THUMBOR_HOST":"'"${THUMBOR_HOST}"'", \
   "THUMBOR_PORT":"'"${THUMBOR_PORT}"'", \
-  "THUMBOR_API_GATEWAY_URL":"'"${THUMBOR_API_GATEWAY_URL}"'" \
+  "INTERNAL_API_GATEWAY_URL":"'"${INTERNAL_API_GATEWAY_URL}"'" \
 }'
 
 if [[ $ENV == 'production' ]]; then
