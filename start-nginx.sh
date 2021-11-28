@@ -11,6 +11,8 @@ JSON_STRING='window.configs = { \
   "SENTRY_DSN":"'"${SENTRY_DSN}"'", \
   "USE_THUMBOR":"'"${USE_THUMBOR}"'", \
   "THUMBOR_HOST":"'"${THUMBOR_HOST}"'", \
+  "USE_IMGPROXY":"'"${USE_IMGPROXY}"'", \
+  "IMGPROXY_HOST":"'"${IMGPROXY_HOST}"'", \
   "THUMBOR_PORT":"'"${THUMBOR_PORT}"'", \
   "INTERNAL_API_GATEWAY_URL":"'"${INTERNAL_API_GATEWAY_URL}"'" \
 }'

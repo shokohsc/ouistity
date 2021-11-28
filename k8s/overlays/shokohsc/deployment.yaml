@@ -22,8 +22,12 @@ spec:
               value: "false"
             - name: THUMBOR_HOST
               value: thumbor.shokohsc.home
+            - name: USE_IMGPROXY
+              value: "true"
+            - name: IMGPROXY_HOST
+              value: imgproxy.shokohsc.home
             - name: INTERNAL_API_GATEWAY_URL
-              value: "http://api.moleculer-ouistity:5000"
+              value: "http://api.comics:5000"
             # - name: USE_SENTRY
             #   value: "true"
             - name: SENTRY_DSN

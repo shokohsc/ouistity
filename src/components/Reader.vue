@@ -79,6 +79,9 @@
       api: function() {
         return window.location.protocol + '//' + getEnv('API_GATEWAY_HOST');
       },
+      imgproxy: function() {
+        return window.location.protocol + '//' + getEnv('IMGPROXY_HOST');
+      },
       thumbor: function() {
         return window.location.protocol + '//' + getEnv('THUMBOR_HOST');
       },
@@ -86,6 +89,8 @@
         return this.thumbor + '/unsafe/meta/smart/filters:quality(40)/' + getEnv('INTERNAL_API_GATEWAY_URL') + this.pages[this.index].image;
       },
       highRes: function() {
+        if (this.useImgproxy === 'true')
+        return this.imgproxy + '/insecure/width:216/height:324/quality:100/plain/';
         return this.thumbor + '/unsafe/smart/filters:quality(100)/';
       }
     },
@@ -94,6 +99,7 @@
         loading: true,
         metadataLoaded: false,
         useThumbor: getEnv('USE_THUMBOR'),
+        useImgproxy: getEnv('USE_IMGPROXY'),
         index: 0,
         page: 0,
         pages: [],
@@ -143,7 +149,7 @@
         return this.metadataLoaded === true ? Math.floor(this.pages[this.index].metadata.target.height * this.width() / this.pages[this.index].metadata.target.width) : this.height();
       },
       imageSource: function(url) {
-        return (this.useThumbor === 'true' ? this.highRes + getEnv('INTERNAL_API_GATEWAY_URL') : this.api) + (this.total > 0 ? url : '');
+        return (this.useThumbor === 'true' || this.useImgproxy === 'true' ? this.highRes + getEnv('INTERNAL_API_GATEWAY_URL') : this.api) + (this.total > 0 ? url : '');
       },
       displayClass: function(item) {
         return parseInt(this.index) === parseInt(item) ? 'displayed' : 'hidden'

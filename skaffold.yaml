@@ -74,3 +74,10 @@ profiles:
         secretName: kaniko-secret
       namespace: kaniko
       pullSecretName: kaniko-secret
+      resources:
+        requests:
+          cpu: 1
+          memory: 1Gi
+        limits:
+          cpu: 2
+          memory: 2Gi

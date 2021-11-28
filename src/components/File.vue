@@ -5,7 +5,7 @@
           <div class="block">
             <figure class="image">
               <img @load="enhance" :src="image" :alt="name" loading="lazy" class="cover" width="216" height="324" />
-              <span class="tooltip">{{ summary }}</span>
+              <span v-if="file.type === 'file'" class="tooltip">{{ summary }}</span>
             </figure>
           </div>
           <div class="block has-text-white has-text-centered">
@@ -25,9 +25,13 @@
   export default {
     computed: {
       lowRes: function() {
+        if (this.useImgproxy === 'true')
+          return window.location.protocol + '//' + getEnv('IMGPROXY_HOST') + '/insecure/width:216/height:324/quality:40/plain/';
         return window.location.protocol + '//' + getEnv('THUMBOR_HOST') + '/unsafe/216x324/smart/filters:quality(40)/';
       },
       highRes: function() {
+        if (this.useImgproxy === 'true')
+          return window.location.protocol + '//' + getEnv('IMGPROXY_HOST') + '/insecure/width:216/height:324/quality:100/plain/';
         return window.location.protocol + '//' + getEnv('THUMBOR_HOST') + '/unsafe/216x324/smart/filters:quality(100)/';
       },
       api: function() {
@@ -37,7 +41,7 @@
         if (!this.file.cover) {
           return defaultCover;
         }
-        return (this.useThumbor === 'true' ? (this.loaded ? this.highRes : this.lowRes) + getEnv('INTERNAL_API_GATEWAY_URL') : this.api) + this.file.cover;
+        return (this.useThumbor === 'true' || this.useImgproxy === 'true' ? (this.loaded ? this.highRes : this.lowRes) + getEnv('INTERNAL_API_GATEWAY_URL') : this.api) + this.file.cover;
       },
       summary: function() {
         if (this.file.info?.summary?.length > 0)
@@ -56,7 +60,8 @@
     data() {
       return {
         loaded: false,
-        useThumbor: getEnv('USE_THUMBOR')
+        useThumbor: getEnv('USE_THUMBOR'),
+        useImgproxy: getEnv('USE_IMGPROXY')
       }
     },
     methods: {
