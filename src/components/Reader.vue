@@ -20,7 +20,6 @@
       :id="`page-${i}`"
       :class="displayClass(i)"
       :style="imageStyle"
-      crossorigin="anonymous"
     />
   </div>
 
