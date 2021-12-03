@@ -15,19 +15,19 @@ spec:
             - name: ENV
               value: development
             - name: API_GATEWAY_HOST
-              value: api.comics.shokohsc.home
+              value: api.ouistity.shokohsc.home
             - name: GRAPHQL_GATEWAY_HOST
-              value: apollo.comics.shokohsc.home
-            - name: USE_THUMBOR
-              value: "false"
+              value: apollo.ouistity.shokohsc.home
+            # - name: USE_THUMBOR
+            #   value: "true"
             - name: THUMBOR_HOST
               value: thumbor.shokohsc.home
-            - name: USE_IMGPROXY
-              value: "true"
+            # - name: USE_IMGPROXY
+            #   value: "true"
             - name: IMGPROXY_HOST
               value: imgproxy.shokohsc.home
-            - name: INTERNAL_API_GATEWAY_URL
-              value: "http://api.comics:5000"
+            # - name: INTERNAL_API_GATEWAY_URL
+            #   value: "http://api.comics:5000"
             # - name: USE_SENTRY
             #   value: "true"
             - name: SENTRY_DSN
@@ -49,6 +49,13 @@ spec:
       #             - /bin/sh
       #             - -c
       #             - update-ca-certificates
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64M
+            limits:
+              cpu: 100m
+              memory: 256M
       #     volumeMounts:
       #     - mountPath: /usr/local/share/ca-certificates
       #       name: tls

@@ -30,6 +30,8 @@ spec:
               value: "80"
             - name: USE_THUMBOR
               value: "false"
+            - name: USE_IMGPROXY
+              value: "false"
             - name: INTERNAL_API_GATEWAY_URL
               value: "http://api.moleculer-ouistity.svc.cluster.local:5000"
             - name: USE_SENTRY
@@ -38,3 +40,18 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64M
+            limits:
+              cpu: 100m
+              memory: 64M
