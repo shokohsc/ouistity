@@ -85,12 +85,13 @@
         return window.location.protocol + '//' + getEnv('THUMBOR_HOST');
       },
       metaUrl: function() {
-        return this.thumbor + '/unsafe/meta/smart/filters:quality(40)/' + getEnv('INTERNAL_API_GATEWAY_URL') + this.pages[this.index].image;
+        if (this.useThumbor === 'true')
+          return this.thumbor + '/unsafe/meta/smart/filters:quality(40)/' + getEnv('INTERNAL_API_GATEWAY_URL') + this.pages[this.index].image;
       },
       highRes: function() {
-        if (this.useImgproxy === 'true')
+        if (this.useThumbor === 'true')
+          return this.thumbor + '/unsafe/smart/filters:quality(100)/';
         return this.imgproxy + '/insecure/width:216/height:324/quality:100/plain/';
-        return this.thumbor + '/unsafe/smart/filters:quality(100)/';
       }
     },
     data() {
@@ -176,7 +177,7 @@
       },
       fullscreen: function() {
         if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
+            document.documentElement.requestFullscreen({navigationUI: "hide"});
         } else {
           if (document.exitFullscreen) {
             document.exitFullscreen();

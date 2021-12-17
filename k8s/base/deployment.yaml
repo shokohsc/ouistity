@@ -28,6 +28,8 @@ spec:
               value: graphql.cluster.local
             - name: GRAPHQL_GATEWAY_PORT
               value: "80"
+            - name: GRAPHQL_CACHE_TTL
+              value: "600"
             - name: USE_THUMBOR
               value: "false"
             - name: USE_IMGPROXY
@@ -40,10 +42,12 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
-          livenessProbe:
-            httpGet:
+          startupProbe:
+            tcpSocket:
               port: http
-              path: /
+          livenessProbe:
+            tcpSocket:
+              port: http
           readinessProbe:
             httpGet:
               port: http

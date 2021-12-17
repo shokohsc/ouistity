@@ -3,13 +3,14 @@ import getEnv from '../utils/env';
 
 const graphqlConfig = {
   protocol: window.location.protocol,
-  host: getEnv('GRAPHQL_GATEWAY_HOST')
+  host: getEnv('GRAPHQL_GATEWAY_HOST'),
+  cacheTTL: getEnv('GRAPHQL_CACHE_TTL')
 };
 
 const graphql = axios.create({
   baseURL: graphqlConfig.protocol + '//' + graphqlConfig.host + '/',
   headers: {
-    'Cache-Control': 'max-age=600'
+    'Cache-Control': `public, max-age=${graphqlConfig.cacheTTL}`
   }
   // timeout: 500
 });

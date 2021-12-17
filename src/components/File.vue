@@ -25,14 +25,14 @@
   export default {
     computed: {
       lowRes: function() {
-        if (this.useImgproxy === 'true')
-          return window.location.protocol + '//' + getEnv('IMGPROXY_HOST') + '/insecure/width:216/height:324/quality:40/plain/';
-        return window.location.protocol + '//' + getEnv('THUMBOR_HOST') + '/unsafe/216x324/smart/filters:quality(40)/';
+        if (this.useThumbor === 'true')
+          return window.location.protocol + '//' + getEnv('THUMBOR_HOST') + '/unsafe/216x324/smart/filters:quality(40)/';
+        return window.location.protocol + '//' + getEnv('IMGPROXY_HOST') + '/insecure/width:216/height:324/quality:40/plain/';
       },
       highRes: function() {
-        if (this.useImgproxy === 'true')
-          return window.location.protocol + '//' + getEnv('IMGPROXY_HOST') + '/insecure/width:216/height:324/quality:100/plain/';
-        return window.location.protocol + '//' + getEnv('THUMBOR_HOST') + '/unsafe/216x324/smart/filters:quality(100)/';
+        if (this.useThumbor === 'true')
+          return window.location.protocol + '//' + getEnv('THUMBOR_HOST') + '/unsafe/216x324/smart/filters:quality(100)/';
+        return window.location.protocol + '//' + getEnv('IMGPROXY_HOST') + '/insecure/width:216/height:324/quality:100/plain/';
       },
       api: function() {
         return window.location.protocol + '//' + getEnv('API_GATEWAY_HOST');

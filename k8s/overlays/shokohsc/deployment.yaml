@@ -18,14 +18,16 @@ spec:
               value: api.ouistity.shokohsc.home
             - name: GRAPHQL_GATEWAY_HOST
               value: apollo.ouistity.shokohsc.home
+            - name: GRAPHQL_CACHE_TTL
+              value: "30"
             # - name: USE_THUMBOR
             #   value: "true"
             - name: THUMBOR_HOST
-              value: thumbor.shokohsc.home
+              value: thumbor.ouistity.shokohsc.home
             # - name: USE_IMGPROXY
             #   value: "true"
             - name: IMGPROXY_HOST
-              value: imgproxy.shokohsc.home
+              value: imgproxy.ouistity.shokohsc.home
             # - name: INTERNAL_API_GATEWAY_URL
             #   value: "http://api.comics:5000"
             # - name: USE_SENTRY
@@ -54,7 +56,7 @@ spec:
               cpu: 10m
               memory: 64M
             limits:
-              cpu: 100m
+              cpu: 1000m
               memory: 256M
       #     volumeMounts:
       #     - mountPath: /usr/local/share/ca-certificates
