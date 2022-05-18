@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2beta26
+apiVersion: skaffold/v2beta28
 kind: Config
 metadata:
   name: ouistity
@@ -51,12 +51,12 @@ profiles:
       namespace: kaniko
       pullSecretName: kaniko-secret
       resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
         limits:
-          cpu: 2
+          cpu: "2"
           memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 1Gi
   deploy:
     kustomize:
       paths:
@@ -75,9 +75,9 @@ profiles:
       namespace: kaniko
       pullSecretName: kaniko-secret
       resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
         limits:
-          cpu: 2
+          cpu: "2"
           memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 1Gi

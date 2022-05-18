@@ -3,9 +3,9 @@ kind: Kustomization
 namespace: ouistity
 bases:
   - ../../base
-  - imgproxy.yaml
-  - thumbor.yaml
+  # - imgproxy.yaml
+  # - thumbor.yaml
 patchesStrategicMerge:
   - ingress.yaml
   - deployment.yaml
-  - service.yaml
+  # - service.yaml
