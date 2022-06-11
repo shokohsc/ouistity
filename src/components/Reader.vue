@@ -382,7 +382,8 @@ img.displayed {
   top: 0;
   left: 0;
   width: 100%;
-  opacity: 0.1;
+  opacity: 0.2;
+  text-shadow: 1px 1px 2px black;
   pointer-events: none;
   font-family: monospace;
   z-index: 10;
