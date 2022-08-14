@@ -1,5 +1,5 @@
 <template>
-    <progress v-if="loading" class="progress" max="100">10%</progress>
+    <progress v-if="loading" class="progress is-large" max="100">10%</progress>
     <Header />
     <Files :files="entries" v-bind="$attrs" />
 </template>
