@@ -16,15 +16,7 @@
     },
     computed: {
       entries: function() {
-        return this.files[this.filesKey] ? this.files[this.filesKey].sort(function (fileA, fileB) {
-          if (fileA.name.toLowerCase() > fileB.name.toLowerCase()) {
-            return 1;
-          }
-          if (fileA.name.toLowerCase() < fileB.name.toLowerCase()) {
-            return -1;
-          }
-          return 0;
-        }) : [];
+        return this.files[this.filesKey] ? this.files[this.filesKey] : [];
       },
       filesKey: function() {
         return '#' + this.q;

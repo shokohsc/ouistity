@@ -16,15 +16,7 @@
     },
     computed: {
       entries: function() {
-        return this.files[this.filesKey] ? this.files[this.filesKey].sort(function (fileA, fileB) {
-          if (fileA.name.toLowerCase() > fileB.name.toLowerCase()) {
-            return 1;
-          }
-          if (fileA.name.toLowerCase() < fileB.name.toLowerCase()) {
-            return -1;
-          }
-          return 0;
-        }) : [];
+        return this.files[this.filesKey] ? this.files[this.filesKey] : [];
       },
       filesKey: function() {
         return '#' + this.directory;
@@ -60,15 +52,14 @@
       this.$watch(
         () => this.$route.query.directory,
         async () => {
-          // console.log(window.localStorage);
           this.directory = this.$route.query.hasOwnProperty('directory') ? this.$route.query.directory : ''
           this.page = this.$route.query.hasOwnProperty('page') ? this.$route.query.page : 1
           this.pageSize = this.$route.query.hasOwnProperty('pageSize') ? this.$route.query.pageSize : 10
           this.files[this.filesKey] = []
-          await this.fetchData(this.directory, this.page, this.pageSize)
           if (this.directory !== '' && this.directory !== '/') {
             this.files[this.filesKey].push(this.parentDirectory);
           }
+          await this.fetchData(this.directory, this.page, this.pageSize)
         },
         { immediate: true }
       )

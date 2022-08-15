@@ -15,21 +15,21 @@ spec:
             - name: ENV
               value: development
             - name: API_GATEWAY_HOST
-              value: api.comics.shokohsc.home
+              value: api.ouistity.shokohsc.home
             - name: GRAPHQL_GATEWAY_HOST
-              value: apollo.comics.shokohsc.home
+              value: apollo.ouistity.shokohsc.home
             - name: GRAPHQL_CACHE_TTL
               value: "30"
             # - name: USE_THUMBOR
             #   value: "true"
-            - name: THUMBOR_HOST
-              value: thumbor.ouistity.shokohsc.home
+            # - name: THUMBOR_HOST
+            #   value: thumbor.ouistity.shokohsc.home
             # - name: USE_IMGPROXY
             #   value: "true"
-            - name: IMGPROXY_HOST
-              value: imgproxy.ouistity.shokohsc.home
-            - name: INTERNAL_API_GATEWAY_URL
-              value: "http://api.comics:5000"
+            # - name: IMGPROXY_HOST
+            #   value: imgproxy.ouistity.shokohsc.home
+            # - name: INTERNAL_API_GATEWAY_URL
+            #   value: "http://api.comics:5000"
             - name: USE_SENTRY
               value: "true"
             - name: SENTRY_DSN
