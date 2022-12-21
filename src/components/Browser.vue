@@ -2,6 +2,9 @@
     <progress v-if="loading" class="progress is-large" max="100">10%</progress>
     <Header />
     <Files :files="entries" v-bind="$attrs" />
+    <div class="columns is-justify-content-center">
+      <button @click="fetchData(this.directory, this.lastFetchedPage + 1, this.pageSize)" v-if="more" class="button is-dark">More...</button>
+    </div>
 </template>
 
 <script>
@@ -33,6 +36,9 @@
           },
           cover: null
         }
+      },
+      more: function() {
+        return this.lastFetchedPage < this.totalPages;
       }
     },
     data() {

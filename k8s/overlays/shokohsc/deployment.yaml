@@ -15,9 +15,9 @@ spec:
             - name: ENV
               value: development
             - name: API_GATEWAY_HOST
-              value: api.ouistity.shokohsc.home
+              value: api.comics.shokohsc.home
             - name: GRAPHQL_GATEWAY_HOST
-              value: apollo.ouistity.shokohsc.home
+              value: apollo.comics.shokohsc.home
             - name: GRAPHQL_CACHE_TTL
               value: "30"
             # - name: USE_THUMBOR
