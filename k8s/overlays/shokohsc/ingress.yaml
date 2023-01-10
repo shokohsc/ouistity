@@ -6,7 +6,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: ca-cluster-issuer
-    dashboard.shokohsc.home/name: ouistity
+    dashboard.shokohsc.home/name: dev-ouistity
     dashboard.shokohsc.home/url: https://dev.comics.shokohsc.home
     dashboard.shokohsc.home/icon: wrench
 spec:
@@ -21,39 +21,7 @@ spec:
             name: ouistity
             port:
               number: 80
-  # - host: dev.comics.shokohsc.home
-  #   http:
-  #     paths:
-  #     - path: /
-  #       pathType: Prefix
-  #       backend:
-  #         service:
-  #           name: ouistity
-  #           port:
-  #             number: 3000
-  # - host: preview.comics.shokohsc.home
-  #   http:
-  #     paths:
-  #     - path: /
-  #       pathType: Prefix
-  #       backend:
-  #         service:
-  #           name: ouistity
-  #           port:
-  #             number: 5000
-  # - host: browsersync.comics.shokohsc.home
-  #   http:
-  #     paths:
-  #     - path: /
-  #       pathType: Prefix
-  #       backend:
-  #         service:
-  #           name: ouistity
-  #           port:
-  #             number: 3002
   tls:
   - hosts:
     - dev.comics.shokohsc.home
-    # - preview.comics.shokohsc.home
-    # - browsersync.comics.shokohsc.home
     secretName: ouistity-cert

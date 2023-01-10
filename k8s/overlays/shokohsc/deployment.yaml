@@ -9,8 +9,6 @@ spec:
       containers:
         - name: ouistity
           image: shokohsc/ouistity
-          # args:
-          #   - dev-serve-sync
           env:
             - name: ENV
               value: development
@@ -20,37 +18,10 @@ spec:
               value: apollo.comics.shokohsc.home
             - name: GRAPHQL_CACHE_TTL
               value: "30"
-            # - name: USE_THUMBOR
-            #   value: "true"
-            # - name: THUMBOR_HOST
-            #   value: thumbor.ouistity.shokohsc.home
-            # - name: USE_IMGPROXY
-            #   value: "true"
-            # - name: IMGPROXY_HOST
-            #   value: imgproxy.ouistity.shokohsc.home
-            # - name: INTERNAL_API_GATEWAY_URL
-            #   value: "http://api.comics:5000"
             - name: USE_SENTRY
               value: "true"
             - name: SENTRY_DSN
               value: https://2f15ffed2e254ced911e78de9312afe0\@glitchtip.shokohsc.home/1
-      #     ports:
-      #       - name: serve
-      #         containerPort: 5000
-      #         protocol: TCP
-      #       - name: dev
-      #         containerPort: 3000
-      #         protocol: TCP
-      #       - name: browser-sync
-      #         containerPort: 3002
-      #         protocol: TCP
-      #     lifecycle:
-      #       postStart:
-      #         exec:
-      #           command:
-      #             - /bin/sh
-      #             - -c
-      #             - update-ca-certificates
           resources:
             requests:
               cpu: 10m
@@ -58,15 +29,3 @@ spec:
             limits:
               cpu: 1000m
               memory: 256M
-      #     volumeMounts:
-      #     - mountPath: /usr/local/share/ca-certificates
-      #       name: tls
-      # volumes:
-      #   - name: tls
-      #     csi:
-      #       readOnly: true
-      #       driver: csi.cert-manager.io
-      #       volumeAttributes:
-      #             csi.cert-manager.io/issuer-name: ca-cluster-issuer
-      #             csi.cert-manager.io/issuer-kind: ClusterIssuer
-      #             csi.cert-manager.io/is-ca: "true"

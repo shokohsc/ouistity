@@ -24,16 +24,6 @@
 
   export default {
     computed: {
-      lowRes: function() {
-        if (this.useThumbor === 'true')
-          return window.location.protocol + '//' + getEnv('THUMBOR_HOST') + '/unsafe/216x324/smart/filters:quality(40)/';
-        return window.location.protocol + '//' + getEnv('IMGPROXY_HOST') + '/insecure/width:216/height:324/quality:40/plain/';
-      },
-      highRes: function() {
-        if (this.useThumbor === 'true')
-          return window.location.protocol + '//' + getEnv('THUMBOR_HOST') + '/unsafe/216x324/smart/filters:quality(100)/';
-        return window.location.protocol + '//' + getEnv('IMGPROXY_HOST') + '/insecure/width:216/height:324/quality:100/plain/';
-      },
       api: function() {
         return window.location.protocol + '//' + getEnv('API_GATEWAY_HOST');
       },
@@ -41,7 +31,7 @@
         if (!this.file.cover) {
           return defaultCover;
         }
-        return (this.useThumbor === 'true' || this.useImgproxy === 'true' ? (this.loaded ? this.highRes : this.lowRes) + getEnv('INTERNAL_API_GATEWAY_URL') : this.api) + this.file.cover;
+        return this.api + this.file.cover;
       },
       summary: function() {
         if (this.file.info?.summary?.length > 0)
@@ -59,9 +49,7 @@
     },
     data() {
       return {
-        loaded: false,
-        useThumbor: getEnv('USE_THUMBOR'),
-        useImgproxy: getEnv('USE_IMGPROXY')
+        loaded: false
       }
     },
     methods: {
