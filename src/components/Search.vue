@@ -1,6 +1,7 @@
 <template>
     <progress v-if="loading" class="progress is-large" max="100">10%</progress>
     <Header />
+    <h1 class="title has-text-light has-text-centered">{{ formattedQuery }}</h1>
     <Files :files="entries" v-bind="$attrs" />
 </template>
 
@@ -20,6 +21,9 @@
       },
       filesKey: function() {
         return '#' + this.q;
+      },
+      formattedQuery: function() {
+        return '' !== this.q ? `Results for '${this.q}'`: ''
       }
     },
     data() {

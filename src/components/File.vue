@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import defaultCover from '../assets/marvel_default.jpg'
+  import defaultCover from '../assets/images/marvel_default.jpg'
   import getEnv from '../utils/env';
 
   export default {

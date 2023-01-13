@@ -3,12 +3,14 @@
 </template>
 
 <script>
+import 'virtual:fonts.css'
+
 export default {};
 </script>
 
 <style>
 body {
-  font-family: "Source Sans Pro";
+  font-family: "Code New Roman";
 }
 body::-webkit-scrollbar {
   display: none;

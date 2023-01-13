@@ -8,14 +8,12 @@ const routes = [
   {
     name: 'Browser',
     path: '/',
-    component: Browser,
-    props: (route) => ({ query: route.query })
+    component: Browser
   },
   {
     name: 'Search',
     path: '/search',
-    component: Search,
-    props: (route) => ({ query: route.query })
+    component: Search
   },
   {
     name: 'Reader',
