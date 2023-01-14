@@ -49,6 +49,7 @@
           this.pageSize = this.$route.query.hasOwnProperty('pageSize') ? this.$route.query.pageSize : 10
           this.files[this.filesKey] = []
           await this.fetchData(this.q, this.page, this.pageSize)
+          document.title = this.title(`Comics - ${this.formattedQuery}`)
         },
         { immediate: true }
       )
@@ -57,6 +58,11 @@
       window.removeEventListener('scroll', this.handleScroll);
     },
     methods: {
+      title(name = '') {
+        return name.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, ($charOne) => {
+          return $charOne.toUpperCase()
+        })
+      },
       async fetchData(q = '', page = 1, pageSize = 10) {
         this.loading = true
 

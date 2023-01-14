@@ -77,6 +77,11 @@
       },
       api: function() {
         return window.location.protocol + '//' + getEnv('API_GATEWAY_HOST');
+      },
+      name: function() {
+        const rgx = /urn:ouistity:books:(?<name>.+):(?<id>.+)/
+        const { name } = rgx.exec(this.$route.params.urn)?.groups ?? {}
+        return name.replaceAll('_', ' ')
       }
     },
     data() {
@@ -103,6 +108,7 @@
           this.page = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
           window.localStorage.setItem(this.$route.params.urn, this.index)
           await this.turnPage(this.index)
+          document.title = this.title(`Comics - ${this.name}`)
         },
         { immediate: true }
       )
@@ -115,6 +121,11 @@
       }
     },
     methods: {
+      title(name = '') {
+        return name.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, ($charOne) => {
+          return $charOne.toUpperCase()
+        })
+      },
       resize: function() {
         this.divStyle = { height: `${this.divHeight()}px` }
         this.imageStyle = { height: `${this.imageHeight()}px` }

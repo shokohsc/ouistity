@@ -26,7 +26,7 @@
         return '#' + this.directory;
       },
       formattedDirectory: function() {
-        return '' !== this.directory ? this.directory: 'Home'
+        return '' !== this.directory ? '/' + this.directory: '/'
       },
       parentDirectory: function() {
         return {
@@ -70,6 +70,7 @@
             this.files[this.filesKey].push(this.parentDirectory);
           }
           await this.fetchData(this.directory, this.page, this.pageSize)
+          document.title = `Comics - ${this.formattedDirectory}`
         },
         { immediate: true }
       )
