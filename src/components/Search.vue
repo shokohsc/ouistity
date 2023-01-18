@@ -1,18 +1,15 @@
 <template>
     <progress v-if="loading" class="progress is-large" max="100">10%</progress>
-    <Header />
     <h1 class="title has-text-light has-text-centered">{{ formattedQuery }}</h1>
     <Files :files="entries" v-bind="$attrs" />
 </template>
 
 <script>
-  import Header from './Header.vue';
   import Files from './Files.vue';
   import graphql from '../api';
 
   export default {
     components: {
-      Header,
       Files
     },
     computed: {
@@ -23,6 +20,8 @@
         return '#' + this.q;
       },
       formattedQuery: function() {
+        if (this.loading)
+          return 'Loading results'
         return '' !== this.q ? `Results for '${this.q}'`: ''
       }
     },
@@ -79,7 +78,7 @@
           this.lastFetchedPage = page;
           this.loading = false
         } catch (e) {
-          console.log(error);
+          console.log(e);
           this.loading = false
         }
       },

@@ -1,6 +1,5 @@
 <template>
     <progress v-if="loading" class="progress is-large" max="100">10%</progress>
-    <Header />
     <h1 class="title has-text-light has-text-centered">{{ formattedDirectory }}</h1>
     <Files :files="entries" v-bind="$attrs" />
     <div class="columns is-justify-content-center">
@@ -9,13 +8,11 @@
 </template>
 
 <script>
-  import Header from './Header.vue';
   import Files from './Files.vue';
   import graphql from '../api';
 
   export default {
     components: {
-      Header,
       Files
     },
     computed: {
@@ -26,6 +23,8 @@
         return '#' + this.directory;
       },
       formattedDirectory: function() {
+        if (this.loading)
+          return 'Loading files'
         return '' !== this.directory ? '/' + this.directory: '/'
       },
       parentDirectory: function() {

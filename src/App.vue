@@ -1,11 +1,22 @@
 <template>
+  <Header v-if="isNotReaderRoute" />
   <router-view />
 </template>
 
 <script>
+import Header from './components/Header.vue';
 import 'virtual:fonts.css'
 
-export default {};
+export default {
+  components: {
+    Header
+  },
+  computed: {
+    isNotReaderRoute() {
+      return 'Reader' !== this.$route.name
+    }
+  }
+};
 </script>
 
 <style>
