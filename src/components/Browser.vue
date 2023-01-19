@@ -1,10 +1,12 @@
 <template>
+  <section class="section">
     <progress v-if="loading" class="progress is-large" max="100">10%</progress>
     <h1 class="title has-text-light has-text-centered">{{ formattedDirectory }}</h1>
     <Files :files="entries" v-bind="$attrs" />
-    <div class="columns is-justify-content-center">
-      <button @click="fetchData(this.directory, this.lastFetchedPage + 1, this.pageSize)" v-if="more" class="button is-dark">More...</button>
+    <div class="is-justify-content-center" v-if="more" >
+      <button @click="fetchData(this.directory, this.lastFetchedPage + 1, this.pageSize)" class="button is-dark">More...</button>
     </div>
+  </section>
 </template>
 
 <script>

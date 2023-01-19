@@ -97,7 +97,9 @@
     },
     created() {
       window.scrollTo(0, 0);
-      window.addEventListener('keyup', this.keyUp);
+      document.querySelector('html').classList.toggle('has-navbar-fixed-top')
+      document.querySelector('div#app').classList.toggle('container')
+      document.addEventListener('keyup', this.keyUp);
       window.addEventListener('resize', this.resize);
       this.$watch(
         () => this.$route.query.page,
@@ -114,7 +116,9 @@
       )
     },
     beforeUnmount: function() {
-      window.removeEventListener('keyup', this.keyUp);
+      document.querySelector('html').classList.toggle('has-navbar-fixed-top')
+      document.querySelector('div#app').classList.toggle('container')
+      document.removeEventListener('keyup', this.keyUp);
       window.removeEventListener('resize', this.resize);
       if (document.fullscreenElement && document.exitFullscreen) {
         document.exitFullscreen();

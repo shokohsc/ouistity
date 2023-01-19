@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Browser from './components/Browser.vue';
 import Search from './components/Search.vue';
 import Reader from './components/Reader.vue';
+import About from './components/About.vue';
 
 const routes = [
   {
@@ -19,6 +20,11 @@ const routes = [
     name: 'Reader',
     path: '/read/:urn',
     component: Reader
+  },
+  {
+    name: 'About',
+    path: '/about',
+    component: About
   },
 ]
 

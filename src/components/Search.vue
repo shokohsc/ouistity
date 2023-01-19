@@ -1,53 +1,69 @@
 <template>
+  <section class="section">
     <progress v-if="loading" class="progress is-large" max="100">10%</progress>
     <h1 class="title has-text-light has-text-centered">{{ formattedQuery }}</h1>
     <Files :files="entries" v-bind="$attrs" />
+    <div class="is-justify-content-center" v-if="more" >
+      <button @click="fetchData(this.store.q, this.lastFetchedPage + 1, this.pageSize)" class="button is-dark">More...</button>
+    </div>
+  </section>
 </template>
 
 <script>
   import Files from './Files.vue';
   import graphql from '../api';
+  import { useSearchStore } from '../stores/search'
 
   export default {
     components: {
       Files
     },
-    computed: {
-      entries: function() {
-        return this.files[this.filesKey] ? this.files[this.filesKey] : [];
-      },
-      filesKey: function() {
-        return '#' + this.q;
-      },
-      formattedQuery: function() {
-        if (this.loading)
-          return 'Loading results'
-        return '' !== this.q ? `Results for '${this.q}'`: ''
-      }
-    },
     data() {
       return {
         loading: true,
-        q: '',
-        page: 1,
+        store: useSearchStore(),
         pageSize: 10,
         files: [],
         totalPages: 1,
         lastFetchedPage: 1
       }
     },
+    computed: {
+      q: function() {
+        return this.store.q
+      },
+      page: function() {
+        return parseInt(this.store.page)
+      },
+      entries: function() {
+        return this.files[this.filesKey] ? this.files[this.filesKey] : [];
+      },
+      filesKey: function() {
+        return '#' + this.store.q;
+      },
+      formattedQuery: function() {
+        if (this.loading)
+          return 'Loading results'
+        return '' !== this.store.q ? `Results for '${this.store.q}'`: ''
+      },
+      more: function() {
+        return this.lastFetchedPage < this.totalPages;
+      }
+    },
     created() {
       window.scrollTo(0, 0);
       window.addEventListener('scroll', this.handleScroll);
+      this.store.$patch({ q: this.$route.query.hasOwnProperty('q') ? this.$route.query.q : '' })
+      this.store.$patch({ page: this.$route.query.hasOwnProperty('page') ? this.$route.query.page : 1 })
       this.$watch(
         () => this.$route.query.q,
         async () => {
           // console.log(window.localStorage);
-          this.q = this.$route.query.hasOwnProperty('q') ? this.$route.query.q : ''
-          this.page = this.$route.query.hasOwnProperty('page') ? this.$route.query.page : 1
+          this.store.$patch({ q: this.$route.query.hasOwnProperty('q') ? this.$route.query.q : '' })
+          this.store.$patch({ page: this.$route.query.hasOwnProperty('page') ? this.$route.query.page : 1 })
           this.pageSize = this.$route.query.hasOwnProperty('pageSize') ? this.$route.query.pageSize : 10
           this.files[this.filesKey] = []
-          await this.fetchData(this.q, this.page, this.pageSize)
+          await this.fetchData(this.store.q, this.page, this.pageSize)
           document.title = this.title(`Comics - ${this.formattedQuery}`)
         },
         { immediate: true }
@@ -85,7 +101,7 @@
       async handleScroll(e) {
         e.stopPropagation();
         if ((window.scrollY >= (document.body.offsetHeight - window.outerHeight)) && (!this.loading) && (this.lastFetchedPage < this.totalPages)) {
-          await this.fetchData(this.q, this.lastFetchedPage + 1, this.pageSize)
+          await this.fetchData(this.store.q, this.lastFetchedPage + 1, this.pageSize)
         }
       }
     },
