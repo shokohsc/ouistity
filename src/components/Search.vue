@@ -3,7 +3,7 @@
     <progress v-if="loading" class="progress is-large" max="100">10%</progress>
     <h1 class="title has-text-light has-text-centered">{{ formattedQuery }}</h1>
     <Files :files="entries" v-bind="$attrs" />
-    <div class="is-justify-content-center" v-if="more" >
+    <div class="has-text-centered" v-if="more" >
       <button @click="fetchData(this.store.q, this.lastFetchedPage + 1, this.pageSize)" class="button is-dark">More...</button>
     </div>
   </section>
