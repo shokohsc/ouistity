@@ -7,25 +7,22 @@
     "serve": "vite preview"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@sentry/tracing": "^7.33.0",
+    "@sentry/vue": "^7.33.0",
     "@vitejs/plugin-vue": "^1.2.3",
-    "@fontsource/source-sans-pro": "^4.4.5",
-    "@fortawesome/fontawesome-free": "^5.15.3",
-    "@sentry/browser": "^6.10.0",
-    "@sentry/integrations": "^6.10.0",
-    "@sentry/tracing": "^6.10.0",
-    "@sentry/vue": "^6.10.0",
-    "axios": "^0.21.1",
-    "bulma": "^0.9.3",
-    "es6-promise": "^4.2.8",
-    "vue": "^3.0.5",
-    "vue-router": "4",
-    "vue3-touch-events": "^4.1.0",
     "@vue/compiler-sfc": "^3.0.5",
     "autoprefixer": "^10.2.6",
+    "axios": "^0.21.1",
     "browser-sync": "^2.26.14",
+    "bulma": "^0.9.3",
+    "es6-promise": "^4.2.8",
     "pinia": "^2.0.29",
     "postcss": "^8.3.5",
     "vite": "^2.3.0",
-    "vite-plugin-fonts": "^0.7.0"
+    "vite-plugin-fonts": "^0.7.0",
+    "vue": "^3.0.5",
+    "vue-router": "4",
+    "vue3-touch-events": "^4.1.0"
   }
 }

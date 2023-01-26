@@ -1,14 +1,9 @@
 import "../node_modules/bulma/css/bulma.css";
-import "@fontsource/source-sans-pro";
 import "@fortawesome/fontawesome-free/css/all.css";
-
 import Vue3TouchEvents from "vue3-touch-events";
-// import * as Sentry from "@sentry/vue";
-// import { Integrations } from "@sentry/tracing";
-import * as Sentry from "@sentry/browser";
-import * as Integrations from "@sentry/integrations";
+import * as Sentry from "@sentry/vue";
+import { BrowserTracing } from "@sentry/tracing";
 import getEnv from './utils/env';
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
@@ -21,22 +16,20 @@ if (getEnv('USE_SENTRY') === 'true') {
   Sentry.init({
     app,
     dsn: getEnv('SENTRY_DSN'),
-    // integrations: [
-    //   new Integrations.BrowserTracing({
-    //     attachProps: true,
-    //     logErrors: true,
-    //     routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-    //     tracingOrigins: ["localhost", window.location.hostname, /^\//],
-    //   }),
-    // ],
+    integrations: [
+      new BrowserTracing({
+        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+        tracePropagationTargets: [window.location.host, /^\//],
+      }),
+    ],
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production
-    // tracesSampleRate: 1.0,
-    integrations: [new Integrations.Vue({
-      attachProps: true,
-      logErrors: true,
-    })]
+    tracesSampleRate: 1.0,
+    sampleRate: 1.0,
+    attachStacktrace: true,
+    maxBreadcrumbs: 50,
+    autoSessionTracking: true,
   });
 }
 
