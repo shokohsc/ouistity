@@ -120,8 +120,8 @@
       document.querySelector('div#app').classList.toggle('container')
       document.removeEventListener('keyup', this.keyUp);
       window.removeEventListener('resize', this.resize);
-      if (document.fullscreenElement && document.exitFullscreen) {
-        document.exitFullscreen();
+      if (document.webkitFullscreenElement && document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
       }
     },
     methods: {
@@ -168,17 +168,17 @@
       },
       close: function() {
         window.removeEventListener('keyup', this.keyUp);
-        if (document.fullscreenElement && document.exitFullscreen) {
-          document.exitFullscreen();
+        if (document.webkitFullscreenElement && document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
         }
         this.$router.back();
       },
       fullscreen: function() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen({navigationUI: "hide"});
+        if (!document.webkitFullscreenElement) {
+            document.documentElement.webkitRequestFullscreen({navigationUI: "hide"});
         } else {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
+          if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
           }
         }
       },
