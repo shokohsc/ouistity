@@ -32,7 +32,7 @@
         <div class="navbar-item">
           <div class="field">
             <div class="control">
-              <input :q="q" class="input has-text-black has-background-grey" type="text" placeholder="Search..." />
+              <input v-model="q" class="input has-text-black has-background-grey" type="text" placeholder="Search..." />
             </div>
           </div>
         </div>
@@ -63,8 +63,14 @@ export default {
     }
   },
   computed: {
-    q: function() {
-      return this.store.q
+    q: {
+        get(){
+            return this.store.q
+        },
+        set(newValue){
+            this.store.$patch({ q: newValue })
+        }
+
     },
     page: function() {
       return this.store.page
