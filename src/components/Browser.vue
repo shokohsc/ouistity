@@ -4,7 +4,7 @@
     <h1 class="title has-text-light has-text-centered">{{ formattedDirectory }}</h1>
     <Files :files="entries" v-bind="$attrs" />
     <div class="has-text-centered" v-if="more" >
-      <button @click="fetchData(this.directory, this.lastFetchedPage + 1, this.pageSize)" class="button is-dark">More...</button>
+      <button @click="fetchData(this.directory, this.lastFetchedPage + 1, this.pageSize, true)" class="button is-dark">More...</button>
     </div>
   </section>
 </template>
@@ -54,7 +54,8 @@
         pageSize: 10,
         files: [],
         totalPages: 1,
-        lastFetchedPage: 1
+        lastFetchedPage: 1,
+        abortController: new AbortController()
       }
     },
     created() {
@@ -80,11 +81,14 @@
       window.removeEventListener('scroll', this.handleScroll);
     },
     methods: {
-      async fetchData(directory = '', page = 1, pageSize = 10) {
+      async fetchData(directory = '', page = 1, pageSize = 10, abort = false) {
+        if (abort && this.abortController)
+          this.abortController.abort()
         this.loading = true
+        this.abortController = new AbortController()
 
         try {
-          const response = await graphql.browse(directory, page, pageSize)
+          const response = await graphql.browse(directory, page, pageSize, this.abortController)
           const result = response.data.data.browse;
           result.rows.forEach(row => {
             row.route = row.type === 'folder' ? { name: 'Browser', query: { directory: directory + row.name } } : { name: 'Reader', params: { urn: row.urn } };

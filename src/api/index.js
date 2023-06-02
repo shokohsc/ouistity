@@ -16,8 +16,9 @@ const graphql = axios.create({
 });
 
 export default {
-    browse(directory = '', page = 1, pageSize = 10) {
+    browse(directory = '', page = 1, pageSize = 10, abortController = new AbortController()) {
         return graphql.post('/', {
+          signal: abortController.signal,
           query: `
             {
               browse(
@@ -48,8 +49,9 @@ export default {
           `
         });
     },
-    search(query = '', page = 1, pageSize = 10) {
+    search(query = '', page = 1, pageSize = 10, abortController = new AbortController()) {
         return graphql.post('/', {
+          signal: abortController.signal,
           query: `
             {
               search(
