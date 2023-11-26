@@ -22,8 +22,8 @@ export default defineConfig({
     }),
     // Put the Sentry vite plugin after all other plugins
     sentryVitePlugin({
-      org: "shokohsc",
-      project: "dev",
+      org: process.env.SENTRY_ORG || "shokohsc",
+      project: process.env.SENTRY_PROJECT,
       authToken: process.env.SENTRY_AUTH_TOKEN,
       url: "https://glitchtip.shokohsc.home",
       release: {
