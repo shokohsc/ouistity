@@ -44,6 +44,7 @@ profiles:
               - src: src/**/*.vue
                 dest: .
           kaniko:
+            useNewRun: true
             cache:
               repo: shokohsc/ouistity
             dockerfile: Dockerfile.dev
@@ -70,6 +71,7 @@ profiles:
       artifacts:
         - image: shokohsc/ouistity
           kaniko:
+            useNewRun: true
             cache:
               repo: shokohsc/ouistity
             dockerfile: Dockerfile

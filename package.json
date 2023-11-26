@@ -9,6 +9,7 @@
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@sentry/tracing": "^7.33.0",
+    "@sentry/vite-plugin": "^2.10.1",
     "@sentry/vue": "^7.33.0",
     "@vitejs/plugin-vue": "^1.2.3",
     "@vue/compiler-sfc": "^3.0.5",

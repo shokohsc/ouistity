@@ -4,7 +4,7 @@
     <h1 class="title has-text-light has-text-centered">{{ formattedDirectory }}</h1>
     <Files :files="entries" v-bind="$attrs" />
     <div class="has-text-centered" v-if="more" >
-      <button @click="fetchData(this.directory, this.lastFetchedPage + 1, this.pageSize, true)" class="button is-dark">More...</button>
+      <button @click="fetchData(this.directory, this.lastFetchedPage + 1, this.pageSize, true)" class="button is-dark">{{ formattedLoadingButton }}...</button>
     </div>
   </section>
 </template>
@@ -28,6 +28,11 @@
         if (this.loading)
           return 'Loading files'
         return '' !== this.directory ? '/' + this.directory: '/'
+      },
+      formattedLoadingButton: function() {
+        if (this.loading)
+          return 'Loading'
+        return 'More'
       },
       parentDirectory: function() {
         return {

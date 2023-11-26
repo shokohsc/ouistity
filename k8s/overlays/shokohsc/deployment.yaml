@@ -13,15 +13,21 @@ spec:
             - name: ENV
               value: development
             - name: API_GATEWAY_HOST
-              value: api.comics.shokohsc.home
+              value: api.ouistity.shokohsc.home
             - name: GRAPHQL_GATEWAY_HOST
-              value: apollo.comics.shokohsc.home
+              value: apollo.ouistity.shokohsc.home
             - name: GRAPHQL_CACHE_TTL
               value: "30"
             - name: USE_SENTRY
               value: "true"
             - name: SENTRY_DSN
               value: https://2f15ffed2e254ced911e78de9312afe0\@glitchtip.shokohsc.home/1
+            - name: SENTRY_AUTH_TOKEN
+              value: db6ff5f7b002322a0b6800027fa823d5faa131dc2535e060375d902728ea8353
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           resources:
             requests:
               cpu: 10m
