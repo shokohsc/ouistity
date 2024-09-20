@@ -12,11 +12,9 @@
       <br/>
       <p class="title">Thanks</p>
       <p class="subtitle">
-        <ul>
-          <li><strong><a href="//vuejs.org/">VueJs</a></strong> for their tiny framework.</li>
-          <li><strong><a href="//bulma.io/">Bulma CSS</a></strong> for their framework.</li>
-          <li><strong><a href="//fontlibrary.org/">Open Font Library</a></strong> for this font.</li>
-        </ul>
+        <strong><a href="//vuejs.org/">VueJs</a></strong> for their tiny framework.<br/>
+        <strong><a href="//bulma.io/">Bulma CSS</a></strong> for their framework.<br/>
+        <strong><a href="//fontlibrary.org/">Open Font Library</a></strong> for this font.
       </p>
     </div>
   </section>
