@@ -43,7 +43,7 @@ export default {
               read(
                 book: "${urn}"
               ){
-                rows { image }
+                rows { image, name }
               }
             }
           `

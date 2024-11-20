@@ -106,8 +106,8 @@
         async () => {
           this.pages = []
           await this.fetchData()
-          this.index = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
-          this.page = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
+          this.index = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
+          this.page = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
           window.localStorage.setItem(this.$route.params.urn, this.index)
           await this.turnPage(this.index)
           document.title = this.title(`Comics - ${this.name}`)
