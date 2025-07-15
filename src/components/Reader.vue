@@ -63,7 +63,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import graphql from '../api';
   import getEnv from '../utils/env';
 
@@ -79,8 +78,8 @@
         return window.location.protocol + '//' + getEnv('API_GATEWAY_HOST');
       },
       name: function() {
-        const rgx = /urn:ouistity:books:(?<name>.+):(?<id>.+)/
-        const { name } = rgx.exec(this.$route.params.urn)?.groups ?? {}
+        const rgx = /.+\/(?<name>.+)/
+        const { name } = rgx.exec(this.$route.params.book)?.groups ?? {}
         return name.replaceAll('_', ' ')
       }
     },
@@ -106,9 +105,9 @@
         async () => {
           this.pages = []
           await this.fetchData()
-          this.index = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
-          this.page = this.$route.query.page || window.localStorage.getItem(this.$route.params.urn) || 0
-          window.localStorage.setItem(this.$route.params.urn, this.index)
+          this.index = this.$route.query.page || window.localStorage.getItem(this.$route.params.book) || 0
+          this.page = this.$route.query.page || window.localStorage.getItem(this.$route.params.book) || 0
+          window.localStorage.setItem(this.$route.params.book, this.index)
           await this.turnPage(this.index)
           document.title = this.title(`Comics - ${this.name}`)
         },
@@ -197,7 +196,7 @@
           await this.metadata()
           this.divStyle = { height: `${this.divHeight()}px` }
           this.imageStyle = { height: `${this.imageHeight()}px` }
-          window.localStorage.setItem(this.$route.params.urn, this.index)
+          window.localStorage.setItem(this.$route.params.book, this.index)
           const el = document.getElementById(`page-${page}`)
           if (el && !el.hasAttribute('src')) {
             const src = this.imageSource(this.pages[this.index].image)
@@ -244,7 +243,7 @@
         this.loading = true
 
         try {
-          const response = await graphql.read(this.$route.params.urn)
+          const response = await graphql.read(this.$route.params.book)
           const read = response.data.data.read;
           read.rows.forEach(row => {
             this.pages.push(row)

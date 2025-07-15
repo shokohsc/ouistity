@@ -18,7 +18,7 @@ const routes = [
   },
   {
     name: 'Reader',
-    path: '/read/:urn',
+    path: '/read/:book',
     component: Reader
   },
   {

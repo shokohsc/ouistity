@@ -26,7 +26,7 @@ export default {
                 page: ${page}
                 pageSize: ${pageSize}
               ){
-                rows { urn name type cover info { series number summary writer coverArtist penciller } }
+                rows { name type cover info { series number summary writer coverArtist penciller } }
                 total
                 totalPages
                 page
@@ -36,12 +36,12 @@ export default {
           `
         });
     },
-    read(urn) {
+    read(book) {
         return graphql.post('/', {
           query: `
             {
               read(
-                book: "${urn}"
+                book: "${book}"
               ){
                 rows { image, name }
               }
@@ -59,7 +59,7 @@ export default {
                 page: ${page}
                 pageSize: ${pageSize}
               ){
-                rows { urn name type cover info { series number summary } }
+                rows { name type cover path info { series number summary } }
                 total
                 totalPages
                 page
