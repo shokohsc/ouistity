@@ -21,12 +21,12 @@ module.exports = {
   watch: false,
   https: false,
   proxy: {
-    target: "ouistity.dev-ouistity:80",
+    target: "comics.dev-comics:80",
     ws: true
   },
   cors: true,
   port: 3000,
-  logPrefix: "Comics",
+  logPrefix: "comics",
   logLevel: "debug",
   logConnections: true,
   socket: {

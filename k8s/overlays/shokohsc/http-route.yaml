@@ -1,0 +1,25 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: comics
+  annotations:
+    dashboard.home.arpa/name: dev-comics
+    dashboard.home.arpa/url: https://dev.comics.home.arpa
+    dashboard.home.arpa/icon: wrench
+spec:
+  hostnames:
+  - dev.comics.home.arpa
+  parentRefs:
+  - name: comics
+    kind: ListenerSet
+    group: gateway.networking.k8s.io
+    sectionName: comics
+  rules:
+  - backendRefs:
+    - name: comics
+      port: 80
+    matches:
+    - path:
+        type: PathPrefix
+        value: /

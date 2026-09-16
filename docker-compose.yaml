@@ -1,0 +1,20 @@
+version: "3.7"
+
+services:
+  comics:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    environment:
+      ENV: development
+      API_GATEWAY_HOST: api.macbook.home.arpa
+      API_GATEWAY_PORT: "3000"
+      GRAPHQL_GATEWAY_HOST: apollo.macbook.home.arpa
+      GRAPHQL_GATEWAY_PORT: "3000"
+      GRAPHQL_CACHE_TTL: "15"
+      USE_SENTRY: "false"
+    ports:
+      - 8080:80
+    volumes:
+      - ./src:/app/src

@@ -20,12 +20,11 @@
 
 <script>
   import defaultCover from '../assets/images/marvel_default.jpg'
-  import getEnv from '../utils/env';
 
   export default {
     computed: {
       api: function() {
-        return window.location.protocol + '//' + getEnv('API_GATEWAY_HOST');
+        return `${window.location.protocol}//api.${window.location.hostname}:${window.location.port}`;
       },
       image: function() {
         if (!this.file.cover) {

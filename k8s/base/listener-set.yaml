@@ -1,0 +1,17 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: ListenerSet
+metadata:
+  name: comics
+  annotations:
+    cert-manager.io/cluster-issuer: ca-cluster-issuer
+spec:
+  parentRef:
+    name: default
+    kind: Gateway
+    group: gateway.networking.k8s.io
+  listeners:
+  - name: comics
+    hostname: comics.cluster.local
+    protocol: HTTP
+    port: 80

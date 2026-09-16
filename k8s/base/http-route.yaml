@@ -1,0 +1,21 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: comics
+spec:
+  hostnames:
+  - comics.cluster.local
+  parentRefs:
+  - name: comics
+    kind: ListenerSet
+    group: gateway.networking.k8s.io
+    sectionName: comics
+  rules:
+  - backendRefs:
+    - name: comics
+      port: 80
+    matches:
+    - path:
+        type: PathPrefix
+        value: /

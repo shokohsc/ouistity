@@ -1,14 +1,12 @@
 import axios from 'axios';
-import getEnv from '../utils/env';
 
 const graphqlConfig = {
   protocol: window.location.protocol,
-  host: getEnv('GRAPHQL_GATEWAY_HOST'),
-  cacheTTL: getEnv('GRAPHQL_CACHE_TTL')
+  cacheTTL: '600'
 };
 
 const graphql = axios.create({
-  baseURL: graphqlConfig.protocol + '//' + graphqlConfig.host + '/',
+  baseURL: `${window.location.protocol}//apollo.${window.location.hostname}:${window.location.port}/`,
   headers: {
     'Cache-Control': graphqlConfig.cacheTTL === '0' ? `no-cache`: `public, max-age=${graphqlConfig.cacheTTL}`
   }

@@ -2,39 +2,40 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: ouistity
+  name: comics
 spec:
   selector:
     matchLabels:
-      app: ouistity
+      app: comics
   template:
     metadata:
       labels:
-        app: ouistity
+        app: comics
     spec:
       securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
         fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
-        - name: ouistity
+        - name: comics
           image: shokohsc/ouistity
-          env:
-            - name: ENV
-              value: development
-            - name: API_GATEWAY_HOST
-              value: api.cluster.local
-            - name: API_GATEWAY_PORT
-              value: "80"
-            - name: GRAPHQL_GATEWAY_HOST
-              value: graphql.cluster.local
-            - name: GRAPHQL_GATEWAY_PORT
-              value: "80"
-            - name: GRAPHQL_CACHE_TTL
-              value: "600"
-            - name: USE_SENTRY
-              value: "false"
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8000
               protocol: TCP
           startupProbe:
             tcpSocket:
